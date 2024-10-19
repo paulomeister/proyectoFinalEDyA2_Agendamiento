@@ -1,0 +1,31 @@
+# Dependencias de node
+node_modules/
+
+# Archivos de logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Entornos y configuración del sistema
+.DS_Store
+.env
+
+# Directorios de compilación
+build/
+dist/
+
+# Datos temporales y cache
+tmp/
+temp/
+.cache/
+
+# Archivos de test coverage
+coverage/
+
+# Archivos creados por editores/IDE (VSCode, JetBrains, etc.)
+.vscode/
+.idea/
+
+# Otros archivos o carpetas que no quieras versionar
