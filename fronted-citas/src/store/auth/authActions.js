@@ -9,38 +9,37 @@ export const registerWithEmail = (email, password, name, username, photo) => asy
   try {
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
 
-    const formData = new FormData();
-    formData.append('uid', user.uid);
-    formData.append('email', user.email);
-    formData.append('name', name);
-    formData.append('username', username);
-    formData.append('photo', photo); //Foto en formato blob
+    
+    const userData = {
+      uid: user.uid,
+      email: user.email,
+      name: name,
+      username: username,
+      photo: photo, 
+    };
 
-    formData.forEach((value, key) => {
-      console.log(key, value);
+    console.log(userData);
+
+    
+    await axios.post('TU_URL', userData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-   
-    // const response = await axios.post('TU_URL', formData, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //   },
-    // });
 
-    // const photoURL = response.data.photoURL; //Tipo URL
-
-    //Actualiza el perfil de firebase
+    
     await updateProfile(user, {
       displayName: name,
-      photoURL: photoURL,
+      photoURL: photo, 
     });
 
-    //Datos serializables para el modelo de usuario
+    
     const serializableUser = {
       uid: user.uid,
       email: user.email,
       displayName: name,
       username: username,
-      photoURL: photoURL,
+      photoURL: photo,  
     };
 
     dispatch(loginSuccess(serializableUser));
