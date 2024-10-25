@@ -15,7 +15,8 @@ app.use(express.json())
 
 app.use(express.static("public"))
 
-app.use('/api/proveedores', require("./Routes/ProveedorRoutes"))
+app.use('/api/usuarios', require("./Routes/UsuarioRoutes"))
+app.use('/api/citas', require("./Routes/CitaRoutes"))
 
 
 
@@ -31,7 +32,7 @@ app.get('/', (req, res) => {
 
 app.listen(process.env.PORT, () => {
 
-    console.log("Servidor corriendo el puerto", process.env.PORT);
+    console.log("Servidor corriendo en el puerto", process.env.PORT);
     
 })
 

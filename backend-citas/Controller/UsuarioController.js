@@ -1,12 +1,31 @@
 const express = require("express");
-const Proveedor = require("../Model/Proveedor");
+const Usuario = require("../Model/Usuario");
+const bcrypt = require('bcryptjs')
 
-const crearProveedor = async (req, res = express.response) => {
+const crearUsuario = async (req, res = express.response) => {
 
     try {
+        
+        const { email, password } = req.body 
 
-        const proveedor = new Proveedor(req.body);
-        await proveedor.save()
+        let usuario = await Usuario.findOne({ email })
+
+        if(usuario) {
+
+            return res.status(400).json({
+
+                ok: false,
+                msg: "Ya existe un usuario con ese correo"
+
+            })
+
+        }
+
+        usuario = new Usuario(req.body);
+        const salt = bcrypt.genSaltSync();
+        usuario.password = bcrypt.hashSync(password, salt)
+        await usuario.save()
+
         res.json(
             
             {
@@ -68,13 +87,28 @@ const disponibilidadProveedor = async (req, res = express.response) => {
 
         }
 
-        const proveedor = await Proveedor.findOne(filtroBusqueda);
+        const proveedor = await Usuario.findOne(filtroBusqueda);
 
         if (!proveedor) {
+
             return res.status(404).json({
+
                 ok: false,
-                message: "No se encontró el proveedor"
+                msg: "No se encontró el proveedor"
+
             });
+
+        }
+
+        if(!proveedor.esProveedor) {
+
+            return res.status(400).json({
+
+                ok: false,
+                msg: "El usuario no está registrado como proveedor"
+
+            })
+
         }
 
         const disponibilidadFiltrada = {};
@@ -119,7 +153,7 @@ const disponibilidadProveedor = async (req, res = express.response) => {
 
 };
 
-const actualizarProveedor = async (req, res = express.response) => {
+const actualizarUsuario = async (req, res = express.response) => {
 
     const { username, email, _id } = req.query; 
     const camposxActualizar = req.body; 
@@ -152,7 +186,7 @@ const actualizarProveedor = async (req, res = express.response) => {
 
         }
 
-        const proveedorActualizado = await Proveedor.findOneAndUpdate(filtroBusqueda, camposxActualizar, { new: true, runValidators: true });
+        const proveedorActualizado = await Usuario.findOneAndUpdate(filtroBusqueda, camposxActualizar, { new: true, runValidators: true });
 
         if (!proveedorActualizado) {
             return res.status(404).json({
@@ -182,7 +216,7 @@ const actualizarProveedor = async (req, res = express.response) => {
     }
 };
 
-const actualizarDisponibilidad = async (req, res = express.response) => {
+const actualizarIsBooked = async (req, res = express.response) => {
 
     /*
     Este método es para cambiar el estado de una cita (isBooked:Boolean) dado un proveedor, una fecha
@@ -201,7 +235,7 @@ const actualizarDisponibilidad = async (req, res = express.response) => {
             Ejemplo: para la fecha "2024-10-20", se tiene dos franjas de disponibilidad. Cada una tiene
                 su _id (ObjectId)
 
-            . (otras llave-valor del documento Proveedor)
+            . (otras llave-valor del documento Usuario)
             .
             .
             "availability": {
@@ -279,14 +313,14 @@ const actualizarDisponibilidad = async (req, res = express.response) => {
             });
         }
 
-        const proveedor = await Proveedor.findOne(filtroBusqueda);
+        const proveedor = await Usuario.findOne(filtroBusqueda);
         
         if (!proveedor) {
         
             return res.status(404).json({
            
                 ok: false,
-                message: "No se encontró el proveedor"
+                msg: "No se encontró el proveedor"
            
             });
         }
@@ -297,7 +331,8 @@ const actualizarDisponibilidad = async (req, res = express.response) => {
 
             const disponibilidadEntradas = [...proveedor.availability.entries()]
 
-            disponibilidadEntradas.forEach(([laFecha, franjas]) => {
+            
+            for(const [laFecha, franjas] of disponibilidadEntradas) {
 
                 if(laFecha === fecha) {
 
@@ -314,9 +349,11 @@ const actualizarDisponibilidad = async (req, res = express.response) => {
     
                     }
 
+                    break
+
                 }
 
-            })
+            }
             
         }
         else {
@@ -338,9 +375,9 @@ const actualizarDisponibilidad = async (req, res = express.response) => {
 
                 if (espacio.startTime === startTime && espacio.endTime === endTime) {
                 
-                    espacio.isBooked = isBooked; // Actualizar el estado
+                    espacio.isBooked = isBooked
                     espacioActualizado = true;
-                    break;
+                    break
                 
                 }
             
@@ -354,7 +391,7 @@ const actualizarDisponibilidad = async (req, res = express.response) => {
                 ok: false,
                 msg: "No se encontró el espacio de tiempo especificado"
             
-            });
+            })
         
         }
 
@@ -366,7 +403,7 @@ const actualizarDisponibilidad = async (req, res = express.response) => {
             msg: "Disponibilidad actualizada exitosamente",
             availability: proveedor.availability
         
-        });
+        })
 
     } 
     catch(error) {
@@ -377,10 +414,261 @@ const actualizarDisponibilidad = async (req, res = express.response) => {
             ok: false,
             msg: "Error interno del servidor al actualizar la disponibilidad"
         
-        });
+        })
+
     }
-};
+
+}
+
+const agregarDisponibilidad = async (req, res = express.response) => {
+    
+    const { username, email, _id, fecha, franjas } = req.body;
+
+    try {
+    
+        let filtroBusqueda = null;
+
+        if(username && username.length > 0) {
+    
+            filtroBusqueda = { username }
+    
+        } 
+        else if(email && email.length > 0) {
+
+            filtroBusqueda = { email }
+        
+        } 
+        else if(_id && _id.length > 0) {
+
+            filtroBusqueda = { _id }
+        
+        } 
+        else {
+        
+            return res.status(400).json({
+        
+                ok: false,
+                msg: "Debe proporcionar un username, email o _id válido para buscar"
+        
+            });
+        
+        }
+
+        const proveedor = await Usuario.findOne(filtroBusqueda);
+
+        if (!proveedor) {
+
+            return res.status(404).json({
+
+                ok: false,
+                msg: "No se encontró el proveedor"
+
+            });
+
+        }
+
+        if (proveedor.availability.has(fecha)) {
+
+            return res.status(400).json({
+                ok: false,
+                msg: `La fecha ${fecha} ya existe en la disponibilidad del proveedor`
+
+            });
+
+        }
+
+        if (!Array.isArray(franjas) || franjas.length === 0) {
+
+            return res.status(400).json({
+
+                ok: false,
+                msg: "Debe proporcionar un array válido de franjas horarias"
+
+            });
+        }
+
+        const nuevasFranjas = franjas.map(franja => ({
+        
+            startTime: franja.startTime,
+            endTime: franja.endTime,
+            isBooked: franja.isBooked || false  
+        
+        }));
+
+        proveedor.availability.set(fecha, nuevasFranjas);
+
+        await proveedor.save();
+
+        res.json({
+
+            ok: true,
+            message: "Disponibilidad añadida exitosamente",
+            availability: proveedor.availability
+
+        });
+
+    } 
+    catch(error) {
+        
+        console.error(error);
+        res.status(500).json({
+            ok: false,
+            message: "Error interno del servidor al agregar disponibilidad"
+        
+        });
+    
+    }
+
+}
+
+const agregarFranjaHoraria = async (req, res = express.response) => {
+
+    const { username, email, _id, fecha, nuevaFranja } = req.body;
+
+    try {
+    
+        let filtroBusqueda = null;
+
+        if(username && username.length > 0) {
+    
+            filtroBusqueda = { username };
+    
+        } 
+        else if(email && email.length > 0) {
+          
+            filtroBusqueda = { email };
+        
+        } 
+        else if (_id && _id.length > 0) {
+        
+            filtroBusqueda = { _id };
+        
+        } 
+        else {
+        
+            return res.status(400).json({
+        
+                ok: false,
+                msg: "Debe proporcionar un username, email o _id válido para buscar"
+        
+            });
+        
+        }
+
+        const proveedor = await Usuario.findOne(filtroBusqueda);
+
+        if (!proveedor) {
+    
+            return res.status(404).json({
+    
+                ok: false,
+                message: "No se encontró el proveedor"
+    
+            });
+    
+        }
+
+        if (!proveedor.availability.has(fecha)) {
+    
+            return res.status(404).json({
+    
+                ok: false,
+                message: `La fecha ${fecha} no existe en la disponibilidad del proveedor`
+    
+            });
+    
+        }
+
+        const { startTime, endTime, isBooked } = nuevaFranja
+
+        const startTimeMin = franjaAMinutos(startTime)
+        const endTimeMin = franjaAMinutos(endTime)
+
+        if (!startTime || !endTime) {
+    
+            return res.status(400).json({
+    
+                ok: false,
+                message: "Debe proporcionar startTime y endTime válidos para la nueva franja horaria"
+    
+            });
+    
+        }
+
+        const franjasExistentes = proveedor.availability.get(fecha);
+
+        for (let franja of franjasExistentes) {
+
+            const franjaST = franjaAMinutos(franja.startTime)
+            const franjaET = franjaAMinutos(franja.endTime)
+    
+            if ((startTimeMin >= franjaST && startTimeMin < franjaET) || 
+                (endTimeMin > franjaST && endTimeMin <= franjaET) || 
+                (startTimeMin <= franjaST && endTimeMin >= franjaET)) {
+                
+                    return res.status(400).json({
+
+                    ok: false,
+                    message: "El nuevo horario entra en conflicto con una franja horaria existente"
+                
+                });
+            
+            }
+        
+        }
+
+        franjasExistentes.push({
+            
+            startTime,
+            endTime,
+            isBooked: isBooked || false
+        
+        })
+
+        await proveedor.save();
+
+        res.json({
+        
+            ok: true,
+            message: "Nueva franja horaria añadida exitosamente",
+            availability: proveedor.availability
+        
+        })
+
+    } 
+    catch(error) {
+        
+        console.error(error);
+        
+        res.status(500).json({
+        
+            ok: false,
+            message: "Error interno del servidor al agregar la franja horaria"
+        
+        })
+    
+    }
+
+    const franjaAMinutos = (strFranja) => {
+
+        const [horas, minutos] = strFranja.split(':').map(Number)
+
+        return horas * 60 + minutos
+
+    }
+
+}
 
 
 
-module.exports = {crearProveedor, disponibilidadProveedor, actualizarProveedor, actualizarDisponibilidad}
+
+module.exports = {
+
+                    crearUsuario, 
+                    disponibilidadProveedor, 
+                    actualizarUsuario, 
+                    actualizarIsBooked, 
+                    agregarDisponibilidad,
+                    agregarFranjaHoraria
+                
+                }
