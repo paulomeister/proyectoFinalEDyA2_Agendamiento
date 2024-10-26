@@ -85,8 +85,115 @@ const crearCita = async (req, res = express.response) => {
 
 }
 
+const actualizarStatusCita = async (req, res = express.response) => {
+
+    const { citaId, status } = req.body
+
+    if(!["agendada", "cancelada", "completada"].includes(status)) {
+
+        return res.status(400).json({
+        
+            ok: false,
+            msg: "El estado proporcionado no es válido"
+        
+        })
+    
+    }
+
+    try {
+    
+        const cita = await Cita.findByIdAndUpdate(
+         
+            citaId,
+            { status },
+            { new: true }
+        
+        )
+
+        if(!cita) {
+            
+            return res.status(404).json({
+            
+                ok: false,
+                msg: "No se encontró la cita con el ID proporcionado"
+            
+            })
+        
+        }
+
+        res.json({
+        
+            ok: true,
+            msg: "Estado de la cita actualizado con éxito",
+            cita
+        
+        })
+    } 
+    catch(error) {
+
+        console.error(error)
+        
+        res.status(500).json({
+            ok: false,
+            msg: "Error al actualizar el estado de la cita"
+        
+        })
+    
+    }
+
+}
+
+const actualizarMensajeNota = async (req, res = express.response) => {
+    
+    const { citaId, mensaje } = req.body
+
+    try {
+    
+        const cita = await Cita.findByIdAndUpdate(
+    
+            citaId,
+            { $set: { "notas.mensaje": mensaje } },
+            { new: true } 
+    
+        )
+
+        if(!cita) {
+            
+            return res.status(404).json({
+                ok: false,
+                msg: "No se encontró la cita con el ID proporcionado"
+            })
+        
+        }
+
+        res.json({
+        
+            ok: true,
+            msg: "Mensaje de la nota actualizado con éxito",
+            cita
+        
+        });
+    }
+    catch(error) {
+
+        console.error(error)
+        
+        res.status(500).json({
+        
+            ok: false,
+            msg: "Error al actualizar el mensaje de la nota"
+        
+        })
+    
+    }
+
+}
+
+
 module.exports = {
 
-                    crearCita
+                    crearCita,
+                    actualizarStatusCita,
+                    actualizarMensajeNota
 
                  }
