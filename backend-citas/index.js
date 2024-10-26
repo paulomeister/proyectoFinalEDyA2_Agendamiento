@@ -1,6 +1,7 @@
 const express = require("express");
 const { dbConnection } = require('./Database/config');
 const cors = require("cors");
+const verifyToken = require('./Middleware/authMiddleware');
 
 
 require("dotenv").config()
@@ -18,6 +19,10 @@ app.use(express.static("public"))
 app.use('/api/usuarios', require("./Routes/UsuarioRoutes"))
 app.use('/api/citas', require("./Routes/CitaRoutes"))
 
+//EJEMPLO DE RUTA PROTEGIDA CON MIDDLEWARE DE AUTENTICACIÓN
+app.get('/ruta-protegida', verifyToken, (req, res) => {
+    res.json({ message: 'Acceso autorizado', user: req.user });
+});
 
 
 app.get('/', (req, res) => {
@@ -33,9 +38,8 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT, () => {
 
     console.log("Servidor corriendo en el puerto", process.env.PORT);
-    
+
 })
 
 
 
-  

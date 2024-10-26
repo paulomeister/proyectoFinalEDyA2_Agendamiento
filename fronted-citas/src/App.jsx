@@ -16,6 +16,7 @@ const App = () => {
   const { user } = useSelector((state) => state.auth);
   
   const dispatch = useDispatch();
+  
   //Mantiene la sesion del usuario iniciada
   useEffect(() => {
     checkAuthStatus(dispatch);

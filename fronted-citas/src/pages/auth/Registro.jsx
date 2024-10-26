@@ -1,15 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerWithEmail } from "../../store/auth/authActions";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 const RegisterComponent = () => {
   const dispatch = useDispatch();
   const { isAuthenticated, loading, error } = useSelector((state) => state.auth);
+  const [isProveedor, setIsProveedor] = useState(false);
   const navigate = useNavigate();
 
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -17,9 +19,16 @@ const RegisterComponent = () => {
     }
   }, [isAuthenticated, navigate]);
 
+
   const handleRegister = (data) => {
-    const { email, password, username, name, photo } = data;
-    dispatch(registerWithEmail(email, password, username, name, photo));
+    // Transforma los servicios de texto a array
+    data.servicios = data.servicios ? data.servicios.split(",").map(servicio => servicio.trim()) : [];
+    dispatch(registerWithEmail(data));
+  };
+
+  // Habilita el campo Servicios
+  const handleProveedorChange = (e) => {
+    setIsProveedor(e.target.checked);
   };
 
   return (
@@ -67,7 +76,7 @@ const RegisterComponent = () => {
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
           </div>
 
-          <div className="mb-6">
+          <div className="mb-4">
             <input
               type="password"
               placeholder="Contraseña"
@@ -81,11 +90,35 @@ const RegisterComponent = () => {
             <input
               type="text"
               placeholder="URL de la Imagen"
-              {...register("imageUrl", { required: "La URL de la imagen es obligatoria" })}
+              {...register("photo")}
               className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-            {errors.imageUrl && <p className="text-red-500 text-sm">{errors.imageUrl.message}</p>}
           </div>
+
+          <div className="mb-4 flex items-center">
+            <input
+              type="checkbox"
+              {...register("esProveedor")}
+              className="mr-2"
+              onChange={handleProveedorChange}
+            />
+            <label className="text-gray-700">¿Es proveedor?</label>
+          </div>
+
+          {/* Campo de Servicios visible solo cuando esProveedor es true  */}
+          {isProveedor && (
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Servicios (separados por comas)"
+                {...register("servicios", {
+                  required: "Los servicios son obligatorios"
+                })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              {errors.servicios && <p className="text-red-500 text-sm">{errors.servicios.message}</p>}
+            </div>
+          )}
 
           <button
             type="submit"
@@ -93,6 +126,15 @@ const RegisterComponent = () => {
           >
             Registrarse
           </button>
+
+          <div className="flex flex-col gap-4 text-center mt-4">
+          <p>
+            ¿Ya tienes una cuenta?{" "}
+            <Link to="/login" className="text-indigo-600 hover:underline">
+              Inicia Sesión
+            </Link>
+          </p>
+        </div>
         </form>
       </div>
     </div>
