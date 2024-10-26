@@ -14,7 +14,7 @@ const LoginComponent = () => {
     if (isAuthenticated) {
       navigate("/dashboard");
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated]);
 
   const handleEmailLogin = (data) => {
     const { email, password } = data;
