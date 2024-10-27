@@ -12,11 +12,13 @@ const { Schema, model } = require("mongoose");
   
   const UsuarioSchema = new Schema({
     
+    uid: { type: String, required: true, unique: true },  
     nombre: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: {type: String, required: true},
     fotoPerfil: { type: String },
+    registradoEn: { type: Date, default: Date.now },
     esProveedor: {type: Boolean, required: true},
     servicios: { type: [String], required: true },
     biografia: { type: String },

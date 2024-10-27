@@ -7,15 +7,19 @@ const {
     actualizarUsuario, 
     actualizarIsBooked,
     agregarDisponibilidad,
-    agregarFranjaHoraria
+    agregarFranjaHoraria,
+    eliminarFranjaHoraria,
+    buscarProveedores
 
     } = require("../Controller/UsuarioController")
 
 router.post('/crearUsuario', crearUsuario)
 router.get('/disponiblidadProveedor', disponibilidadProveedor)
 router.put('/actualizarUsuario', actualizarUsuario)
-router.put('/proveedor/actualizarDisponibilidad', actualizarIsBooked)
+router.put('/actualizarDisponibilidad', actualizarIsBooked)
 router.put('/agregarDisponibilidad', agregarDisponibilidad)
 router.put('/fecha/agregarFranja', agregarFranjaHoraria)
+router.put('/eliminarFranja', eliminarFranjaHoraria)
+router.post('/buscarConFiltros', buscarProveedores)
 
 module.exports = router

@@ -81,8 +81,10 @@ const disponibilidadProveedor = async (req, res = express.response) => {
         else {
             
             return res.status(400).json({
+
                 ok: false,
                 msg: "Debe proporcionar un username, email o _id válido para buscar"
+            
             })
 
         }
@@ -609,7 +611,8 @@ const agregarFranjaHoraria = async (req, res = express.response) => {
                     return res.status(400).json({
 
                     ok: false,
-                    message: "El nuevo horario entra en conflicto con una franja horaria existente"
+                    msg: "El nuevo horario entra en conflicto con una franja horaria existente",
+                    conflictoCon: franja
                 
                 });
             
@@ -630,7 +633,7 @@ const agregarFranjaHoraria = async (req, res = express.response) => {
         res.json({
         
             ok: true,
-            message: "Nueva franja horaria añadida exitosamente",
+            msg: "Nueva franja horaria añadida exitosamente",
             availability: proveedor.availability
         
         })
@@ -659,6 +662,173 @@ const agregarFranjaHoraria = async (req, res = express.response) => {
 
 }
 
+const eliminarFranjaHoraria = async (req, res = express.response) => {
+
+    const { username, email, _id, fecha, franjaId, startTime, endTime } = req.body
+
+    try {
+
+        let filtroBusqueda = null
+
+        if(username && username.length > 0) {
+
+            filtroBusqueda = { username }
+        
+        } 
+        else if(email && email.length > 0) {
+            
+            filtroBusqueda = { email }
+        
+        } 
+        else if (_id && _id.length > 0) {
+        
+            filtroBusqueda = { _id }
+        
+        } 
+        else {
+        
+            return res.status(400).json({
+        
+                ok: false,
+                msg: "Debe proporcionar un username, email o _id válido para buscar"
+        
+            })
+        
+        }
+
+        const proveedor = await Usuario.findOne(filtroBusqueda);
+
+        if(!proveedor) {
+
+            return res.status(404).json({
+                ok: false,
+                msg: "No se encontró el proveedor"
+            
+            })
+        
+        }
+
+        if(!proveedor.availability.has(fecha)) {
+          
+            return res.status(404).json({
+          
+                ok: false,
+                msg: `La fecha ${fecha} no existe en la disponibilidad del proveedor`
+          
+            })
+        
+        }
+
+        const franjasExistentes = proveedor.availability.get(fecha);
+
+        let franjaEliminada = false
+
+        if(franjaId) {
+
+            const index = franjasExistentes.findIndex(franja => franja._id.toString() === franjaId)
+
+            if(index !== -1) {
+
+                franjasExistentes.splice(index, 1);
+                franjaEliminada = true
+
+            }
+
+        }
+
+        else if(startTime && endTime) {
+
+            const index = franjasExistentes.findIndex(franja => franja.startTime === startTime && franja.endTime === endTime)
+
+            if(index !== -1) {
+
+                franjasExistentes.splice(index, 1)
+                franjaEliminada = true
+            
+            }
+        
+        }
+
+        if(!franjaEliminada) {
+          
+            return res.status(404).json({
+          
+                ok: false,
+                msg: "No se encontró la franja horaria con los detalles proporcionados"
+          
+            })
+        }
+
+        await proveedor.save();
+
+        res.status(200).json({
+        
+            ok: true,
+            msg: "Franja horaria eliminada exitosamente",
+            availability: proveedor.availability
+        
+        });
+
+    } 
+    catch(error) {
+
+        console.error(error)
+        
+        res.status(500).json({
+            
+            ok: false,
+            msg: "Error interno del servidor al eliminar la franja horaria"
+
+        })
+
+    }
+
+}
+
+const buscarProveedores = async (req, res = express.response) => {
+
+    const { nombre, servicios } = req.body;
+
+    try {
+    
+        const filtrosConsulta = { esProveedor: true };
+
+        if(nombre) {
+          
+            filtrosConsulta.nombre = new RegExp(nombre, "i")
+        
+        }
+
+        if(servicios) {
+
+            filtrosConsulta.servicios = { $in: [new RegExp(servicios, "i")] }
+        
+        }
+
+        const proveedores = await Usuario.find(filtrosConsulta);
+
+        res.status(200).json({
+        
+            ok: true,
+            proveedores
+        
+        })
+
+    } 
+    catch(error) {
+        
+        console.error(error)
+        
+        res.status(500).json({
+        
+            ok: false,
+            msg: "Error interno del servidor al buscar proveedores"
+        
+        });
+    
+    }
+
+}
 
 
 
@@ -669,6 +839,8 @@ module.exports = {
                     actualizarUsuario, 
                     actualizarIsBooked, 
                     agregarDisponibilidad,
-                    agregarFranjaHoraria
-                
+                    agregarFranjaHoraria,
+                    eliminarFranjaHoraria,
+                    buscarProveedores
+                                    
                 }

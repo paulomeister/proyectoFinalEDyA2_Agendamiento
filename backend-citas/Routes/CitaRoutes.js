@@ -4,7 +4,9 @@ const {
 
     crearCita,
     actualizarStatusCita,
-    actualizarMensajeNota
+    actualizarMensajeNota,
+    obtenerCitasUsuario,
+    obtenerCitasProveedor
 
 } = require("../Controller/CitaController")
 
@@ -12,6 +14,8 @@ const {
 router.post('/crearCita', crearCita)
 router.put('/modificarMensaje', actualizarMensajeNota)
 router.put('/actualizarStatus', actualizarStatusCita)
+router.get('/citasAgendadas/:usuarioId', obtenerCitasUsuario)
+router.get('/citasAtender/:proveedorId', obtenerCitasProveedor)
 
 
 module.exports = router

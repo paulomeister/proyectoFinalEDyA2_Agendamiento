@@ -189,11 +189,97 @@ const actualizarMensajeNota = async (req, res = express.response) => {
 
 }
 
+const obtenerCitasUsuario = async (req, res = express.response) => {
+
+    const { usuarioId } = req.params;
+
+    try {
+
+        const citas = await Cita.find({ usuarioId })
+
+        if (citas.length === 0) {
+
+            return res.status(404).json({
+            
+                ok: false,
+                msg: "No se encontraron citas para el usuario"
+            
+            })
+        
+        }
+
+        res.status(200).json({
+          
+            ok: true,
+            citas
+        
+        })
+
+    } 
+    catch(error) {
+        
+        console.error(error)
+        
+        res.status(500).json({
+        
+            ok: false,
+            msg: "Error al obtener citas del usuario"
+        
+        })
+    
+    }
+
+}
+
+const obtenerCitasProveedor = async (req, res = express.response) => {
+
+    const { proveedorId } = req.params;
+
+    try {
+
+        const citas = await Cita.find({ proveedorId })
+
+        if (citas.length === 0) {
+
+            return res.status(404).json({
+            
+                ok: false,
+                msg: "No se encontraron citas para el proveedor"
+            
+            })
+        
+        }
+
+        res.status(200).json({
+          
+            ok: true,
+            citas
+        
+        })
+
+    } 
+    catch(error) {
+        
+        console.error(error)
+        
+        res.status(500).json({
+        
+            ok: false,
+            msg: "Error al obtener citas del proveedor"
+        
+        })
+    
+    }
+
+}
+
 
 module.exports = {
 
                     crearCita,
                     actualizarStatusCita,
-                    actualizarMensajeNota
+                    actualizarMensajeNota,
+                    obtenerCitasUsuario,
+                    obtenerCitasProveedor
 
                  }
