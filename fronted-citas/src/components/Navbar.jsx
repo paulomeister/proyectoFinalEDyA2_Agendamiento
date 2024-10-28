@@ -73,15 +73,16 @@ const Navbar = () => {
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
-                <a href="#" className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">
+                <button onClick={() => navigate(`/dashboard`)} className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">
+                  Home
+                </button>
+                <button onClick={() => navigate(`/dashboard`)} className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                  
                   Calendario
-                </a>
-                <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
-                  Proveedores
-                </a>
-                <a href="#" className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                </button>
+                <button onClick={() => navigate(`/dashboard`)} className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
                   Citas
-                </a>
+                </button>
               </div>
             </div>
           </div>

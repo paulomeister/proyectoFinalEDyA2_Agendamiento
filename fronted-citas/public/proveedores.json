@@ -1,0 +1,82 @@
+[
+  {
+    "uid": "1e7b9d8e-3c4b-4a6e-9f3e-1a2b3c4d5e6f",
+    "nombre": "Bruce Lee",
+    "fotoPerfil": "https://randomuser.me/api/portraits/men/1.jpg",
+    "servicios": ["Artes Marciales", "Actuación"],
+    "calificacionPromedio": 4.9,
+    "personasAtendidas": 35
+  },
+  {
+    "uid": "2f8c0d9f-4d5e-5f7e-8g9h-2b3c4d5e6f7g",
+    "nombre": "Lucy Liu",
+    "fotoPerfil": "https://randomuser.me/api/portraits/women/1.jpg",
+    "servicios": ["Pintura", "Actuación"],
+    "calificacionPromedio": 4.7,
+    "personasAtendidas": 28
+  },
+  {
+    "uid": "3g9d1e0g-5e6f-6g8h-9i0j-3c4d5e6f7g8h",
+    "nombre": "Jackie Chan",
+    "fotoPerfil": "https://randomuser.me/api/portraits/men/2.jpg",
+    "servicios": ["Stuntman", "Actuación"],
+    "calificacionPromedio": 4.8,
+    "personasAtendidas": 40
+  },
+  {
+    "uid": "4h0e2f1h-6f7g-7h9i-0j1k-4d5e6f7g8h9i",
+    "nombre": "Emma Stone",
+    "fotoPerfil": "https://randomuser.me/api/portraits/women/2.jpg",
+    "servicios": ["Actuación", "Producción"],
+    "calificacionPromedio": 4.6,
+    "personasAtendidas": 22
+  },
+  {
+    "uid": "5i1f3g2i-7g8h-8i0j-1k2l-5e6f7g8h9i0j",
+    "nombre": "Morgan Freeman",
+    "fotoPerfil": "https://randomuser.me/api/portraits/men/3.jpg",
+    "servicios": ["Narración", "Actuación"],
+    "calificacionPromedio": 4.9,
+    "personasAtendidas": 50
+  },
+  {
+    "uid": "6j2g4h3j-8h9i-9j1k-2l3m-6f7g8h9i0j1k",
+    "nombre": "Sandra Bullock",
+    "fotoPerfil": "https://randomuser.me/api/portraits/women/3.jpg",
+    "servicios": ["Actuación", "Producción"],
+    "calificacionPromedio": 4.5,
+    "personasAtendidas": 31
+  },
+  {
+    "uid": "7k3h5i4k-9i0j-0k1l-3m4n-7g8h9i0j1k2l",
+    "nombre": "Tom Hanks",
+    "fotoPerfil": "https://randomuser.me/api/portraits/men/4.jpg",
+    "servicios": ["Actuación", "Dirección"],
+    "calificacionPromedio": 4.8,
+    "personasAtendidas": 45
+  },
+  {
+    "uid": "8l4i6j5l-0j1k-1l2m-4n5o-8h9i0j1k2l3m",
+    "nombre": "Scarlett Johansson",
+    "fotoPerfil": "https://randomuser.me/api/portraits/women/4.jpg",
+    "servicios": ["Actuación", "Producción"],
+    "calificacionPromedio": 4.7,
+    "personasAtendidas": 37
+  },
+  {
+    "uid": "9m5j7k6m-1k2l-2m3n-5o6p-9i0j1k2l3m4n",
+    "nombre": "Robert Downey Jr.",
+    "fotoPerfil": "https://randomuser.me/api/portraits/men/5.jpg",
+    "servicios": ["Actuación", "Producción"],
+    "calificacionPromedio": 4.8,
+    "personasAtendidas": 42
+  },
+  {
+    "uid": "0n6k8l7n-2l3m-3n4o-6p7q-0j1k2l3m4n5o",
+    "nombre": "Anne Hathaway",
+    "fotoPerfil": "https://randomuser.me/api/portraits/women/5.jpg",
+    "servicios": ["Actuación", "Canto"],
+    "calificacionPromedio": 4.6,
+    "personasAtendidas": 30
+  }
+]
