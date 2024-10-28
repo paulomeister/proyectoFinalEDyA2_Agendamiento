@@ -36,7 +36,7 @@ const DashboardComponent = () => {
   //     console.error("Error al verificar el token:", error);
   //   }
   // };
-
+  
   return (
     <div>
       <h1>Bienvenido al Dashboard {user?.email}</h1>

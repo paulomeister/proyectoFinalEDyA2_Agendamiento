@@ -13,9 +13,8 @@ export const registerWithEmail = (data) => async (dispatch) => {
   try {
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
 
-    console.log("data", data);
-
     const userData = {
+      uid: user.uid,
       email: email,
       nombre: name,
       username: username,
@@ -39,6 +38,7 @@ export const registerWithEmail = (data) => async (dispatch) => {
 
 
     const serializableUser = {
+      uid: user.uid,
       email: email,
       displayName: name,
       username: username,
@@ -57,7 +57,6 @@ export const loginWithEmail = (email, password) => async (dispatch) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
     const serializableUser = {
-      token: auth.currentUser.getIdToken(true),
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
