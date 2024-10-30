@@ -10,6 +10,7 @@ import { checkAuthStatus } from "./store/auth/authActions";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import ProveedorDetail from "./pages/ProveedorDetail/ProveedorDetail";
+import AgendarCita from "/src/pages/ProveedorDetail/AgendarCita.jsx"
 
 
 
@@ -47,8 +48,17 @@ const App = () => {
               <ProveedorDetail />
             }
           />
-        </Route>
+          <Route
+            path="/proveedor/:id/agendarCita"
+            element={
+              <PrivateRoute>
+                <AgendarCita />
+              </PrivateRoute>
 
+            }
+         />
+        </Route>
+        
       </Routes>
     </Router>
   );
