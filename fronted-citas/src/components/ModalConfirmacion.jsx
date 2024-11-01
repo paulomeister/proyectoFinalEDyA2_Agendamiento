@@ -11,6 +11,7 @@ function ModalConfirmacion({myModal, setModal, inicio, fin, fecha}) {
     const popUpRef = useRef(null);
     const [user, setUser] = useState(null)
     const [usuarioId, setUsuarioId] = useState(null)
+    const [cargando, setCargando] = useState(null)
 
     const {id} = useParams()
 
@@ -46,8 +47,9 @@ function ModalConfirmacion({myModal, setModal, inicio, fin, fecha}) {
        
         const unsubscribe = auth.onAuthStateChanged((currentUser) => {
         
+            setCargando(true)
             setUser(currentUser)
-    
+            setCargando(false)
         })
 
         return () => unsubscribe()
@@ -68,14 +70,21 @@ function ModalConfirmacion({myModal, setModal, inicio, fin, fecha}) {
             console.error(error)
 
         }
-
-        
-
+    
     }
 
-    const handleReserva = async () => {
+    useEffect(() => {
+    
+        if(cargando === false) {
 
-        obtenerUsuario_id();
+            obtenerUsuario_id()
+            
+        }
+    
+    }, [user])
+
+
+    const handleReserva = async () => {
     
         try {
 
