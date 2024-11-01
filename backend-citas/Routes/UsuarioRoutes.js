@@ -9,7 +9,10 @@ const {
     agregarDisponibilidad,
     agregarFranjaHoraria,
     eliminarFranjaHoraria,
-    buscarProveedores
+    buscarProveedores,
+    obtenerProveedores,
+    obtenerProveedoresListado,
+    obtenerUsuarioXuid
 
     } = require("../Controller/UsuarioController")
 
@@ -21,5 +24,8 @@ router.put('/agregarDisponibilidad', agregarDisponibilidad)
 router.put('/fecha/agregarFranja', agregarFranjaHoraria)
 router.put('/eliminarFranja', eliminarFranjaHoraria)
 router.post('/buscarConFiltros', buscarProveedores)
+router.get('/obtenerProveedores', obtenerProveedores)
+router.get('/busquedaProveedores', obtenerProveedoresListado)
+router.get('/usuario/:uid', obtenerUsuarioXuid)
 
-module.exports = router
+module.exports = router 

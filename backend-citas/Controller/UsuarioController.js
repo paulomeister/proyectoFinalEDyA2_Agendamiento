@@ -830,6 +830,104 @@ const buscarProveedores = async (req, res = express.response) => {
 
 }
 
+const obtenerProveedores = async (req, res) => {
+    
+    try {
+
+      const proveedores = await Usuario.find({ esProveedor: true })
+      
+      res.status(200).json({
+        
+        proveedores
+    
+      })
+
+    } 
+    catch(error) {
+
+        console.error(error)
+
+        res.status(500).json({
+      
+            ok: false,
+            msg: "Error al obtener los proveedores"
+      
+        })
+   
+    }
+    
+}
+
+const obtenerProveedoresListado = async (req, res) => {
+    
+    try {
+    
+        const proveedores = await Usuario.find({ esProveedor: true }, 'nombre servicios fotoPerfil');
+        
+        res.status(200).json({
+
+            proveedores
+        
+        })
+    } 
+    catch(error) {
+
+        console.error(error)
+      
+        res.status(500).json({
+      
+            ok: false,
+            message: "Error al obtener los proveedores"
+      
+        })
+    
+    }
+  
+}
+
+const obtenerUsuarioXuid = async (req, res) => {
+
+    try {
+    
+        const { uid } = req.params
+
+        const usuario = await Usuario.findOne({ uid })
+
+        if (!usuario) {
+        
+            return res.status(404).json({
+        
+                ok: false,
+                msg: "Usuario no encontrado"
+        
+            })
+        
+        }
+
+        res.status(200).json({
+        
+            usuario
+        
+        })
+    
+    } 
+    catch(error) {
+        
+        console.error(error);
+        
+        res.status(500).json({
+        
+            ok: false,
+            msg: "Error al obtener el usuario"
+        
+        })
+    
+    }
+
+}
+
+  
+
 
 
 module.exports = {
@@ -841,6 +939,9 @@ module.exports = {
                     agregarDisponibilidad,
                     agregarFranjaHoraria,
                     eliminarFranjaHoraria,
-                    buscarProveedores
+                    buscarProveedores,
+                    obtenerProveedores,
+                    obtenerProveedoresListado,
+                    obtenerUsuarioXuid
                                     
                 }

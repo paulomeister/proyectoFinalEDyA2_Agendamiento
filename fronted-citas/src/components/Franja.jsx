@@ -1,3 +1,6 @@
+import { Collapse } from 'flowbite';
+
+
 
 function Franja({valor}) {
 

@@ -12,7 +12,7 @@ function MyDropdown({id, buttonId, valor, setValor, opciones}) {
         const options = {
 
             placement: 'bottom',
-            triggerType: 'hover',
+            triggerType: 'click',
             offsetSkidding: 0,
             offsetDistance: 10,
             delay: 300
@@ -52,8 +52,13 @@ function MyDropdown({id, buttonId, valor, setValor, opciones}) {
           {
           opciones.map((item, idx) => {
 
-            return (<li key={idx} onClick={() => setValor(item)}>
-              <Franja valor={item} />
+            return (<li key={idx} onClick={() => {
+              
+              setValor(item)
+              document.getElementById(buttonId).click()
+              
+              }}>
+              <Franja valor={item}/>
             </li>)  
 
           })
