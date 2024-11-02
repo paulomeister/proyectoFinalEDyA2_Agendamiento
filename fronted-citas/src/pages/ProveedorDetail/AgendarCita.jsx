@@ -1,25 +1,22 @@
-import MyDropdown from "../../components/MyDropdown.jsx";
-import ListarCitas from "../../components/ListarCitas.jsx";
-import ModalConfirmacion from "../../components/ModalConfirmacion.jsx";
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import MyDropdown from "../../components/MyDropdown.jsx"
+import ListarCitas from "../../components/ListarCitas.jsx"
+import ModalConfirmacion from "../../components/ModalConfirmacion.jsx"
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { asignarFecha } from '../../store/slices/reservacionSlice'
+import { useDispatch } from "react-redux"
+
 
 
 function AgendarCita() {
   
   const { id } = useParams()
-
-  const [inicioFranja, setInicioFranja] = useState(null)
-  const [finFranja, setFinFranja] = useState(null)
-  const [fechaFranja, setFechaFranja] = useState(null)
+  const dispatch = useDispatch()
   
-  const [myModal, setMyModal] = useState(null)
-
-  const [disponibilidad, setDisponibilidad] = useState([])
-  const [disponibilidadDiaria, setDisponibilidadDiaria] = useState([])
-
-  const [isDisponible, setIsDisponible] = useState(null)
+  const [disponibilidad, setDisponibilidad] = useState([]) 
+  const [disponibilidadDiaria, setDisponibilidadDiaria] = useState([]) 
+  const [isDisponible, setIsDisponible] = useState(null) 
 
   const [mes, setMes] = useState("Mes")
   const [dia, setDia] = useState("Día")
@@ -58,7 +55,7 @@ function AgendarCita() {
 
       try {
 
-        const response = await axios.get(`http://localhost:4000/api/usuarios/disponiblidadProveedor?_id=${id}`) 
+        const response = await axios.get(`http://localhost:4000/api/usuarios/disponiblidadProveedor?uid=${id}`) 
         
         if(!response.data) {
 
@@ -85,7 +82,7 @@ function AgendarCita() {
     if (year !== "Año" && mes !== "Mes" && dia !== "Día") {
   
       const fechaFormato = `${year}-${mesesNumeros[mes]}-${dia.padStart(2, '0')}`
-      setFechaFranja(fechaFormato)
+      dispatch(asignarFecha(fechaFormato))
       
       const disponibilidadDia = disponibilidad.availability[fechaFormato]
       setDisponibilidadDiaria(disponibilidadDia)
@@ -96,17 +93,7 @@ function AgendarCita() {
   
   }, [year, mes, dia, disponibilidad])
 
-
-  // Para pruebas TODO: borrar luego
-  useEffect(() => {
-
-    console.log("efecto")
-    console.log(disponibilidad);
-    console.log(inicioFranja);
-    console.log(finFranja)
-
-  }, [disponibilidad, finFranja, inicioFranja])
-
+  
   return (
     <>
       <div>
@@ -122,11 +109,11 @@ function AgendarCita() {
         </div>
 
           {isDisponible ? <p className="text-lg font-bold mt-2">Franjas:</p> : <p className="text-lg text-red-600 font-bold mt-4">El usuario no tiene disponibilidad en esa fecha</p>} 
-          {isDisponible && <ListarCitas modal={myModal} disponibilidad={disponibilidadDiaria} inicio={setInicioFranja} fin={setFinFranja}/>}
+          {isDisponible && <ListarCitas disponibilidad={disponibilidadDiaria} />}
       
       </div>
 
-      <ModalConfirmacion myModal={myModal} setModal={setMyModal} inicio={inicioFranja} fin={finFranja} fecha={fechaFranja}/>
+      <ModalConfirmacion />
 
     </>
   );
