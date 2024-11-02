@@ -2,8 +2,8 @@ const { Schema, model } = require("mongoose");
 
 const CitaSchema = new Schema({
 
-  usuarioId: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
-  proveedorId: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
+  usuarioId: { type: String, ref: 'Usuario', required: true },
+  proveedorId: { type: String, ref: 'Usuario', required: true },
   fecha: { type: String, required: true },
   comienzaEn: { type: String, required: true },
   terminaEn: { type: String, required: true },

@@ -57,7 +57,7 @@ const crearUsuario = async (req, res = express.response) => {
 
 const disponibilidadProveedor = async (req, res = express.response) => {
     
-    const { username, email, _id } = req.query; 
+    const { username, email, _id, uid } = req.query; 
  
     try {
         
@@ -71,6 +71,11 @@ const disponibilidadProveedor = async (req, res = express.response) => {
         else if(email && email.length > 0) {
 
             filtroBusqueda = { email };
+        
+        }
+        else if(uid && uid.length > 0) {
+
+            filtroBusqueda = { uid };
         
         } 
         else if(_id && _id.length > 0) {
@@ -277,7 +282,7 @@ const actualizarIsBooked = async (req, res = express.response) => {
 
     */
 
-    const { username, email, _id, fecha, startTime, endTime, isBooked, franjaId } = req.body;
+    const { username, email, _id, uid, fecha, startTime, endTime, isBooked, franjaId } = req.body;
 
     let modo = 0
 
@@ -299,6 +304,11 @@ const actualizarIsBooked = async (req, res = express.response) => {
         else if(email && email.length > 0) {
             
             filtroBusqueda = { email };
+
+        }
+        else if(uid && uid.length > 0) {
+            
+            filtroBusqueda = { uid };
 
         } 
         else if(_id && _id.length > 0) {
