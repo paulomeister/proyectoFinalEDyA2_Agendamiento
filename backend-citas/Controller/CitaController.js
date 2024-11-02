@@ -10,8 +10,8 @@ const crearCita = async (req, res = express.response) => {
 
         const {usuarioId, proveedorId} = req.body
 
-        const elUsuario = await Usuario.findOne({ _id: usuarioId })
-        const elProveedor = await Usuario.findOne({ _id: proveedorId })
+        const elUsuario = await Usuario.findOne({ uid: usuarioId })
+        const elProveedor = await Usuario.findOne({ uid: proveedorId })
 
         if((!elUsuario || elUsuario.length === 0) &&
            (!elProveedor || elProveedor.length === 0)) {
