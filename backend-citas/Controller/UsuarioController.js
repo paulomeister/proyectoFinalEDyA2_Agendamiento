@@ -872,7 +872,7 @@ const obtenerProveedoresListado = async (req, res) => {
     
     try {
     
-        const proveedores = await Usuario.find({ esProveedor: true }, 'nombre servicios fotoPerfil');
+        const proveedores = await Usuario.find({ esProveedor: true }, 'nombre servicios fotoPerfil uid');
         
         res.status(200).json({
 
