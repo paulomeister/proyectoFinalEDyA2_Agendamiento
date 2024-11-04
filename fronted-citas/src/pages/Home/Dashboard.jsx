@@ -1,44 +1,43 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import axios from "axios";
-import { auth } from "../../firebaseConfig";
-import BarraBusqueda from "./BarraBusqueda";
-import ProveedorList from "./ProveedorList";
-import { useState } from "react";
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import ProveedorList from './ProveedorList';
+import SearchBar from './SearchBar';
 
 const DashboardComponent = () => {
   const [search, setSearch] = useState('');
+  const [proveedores, setProveedores] = useState([]);
+  const [noResults, setNoResults] = useState(false); 
   const { user } = useSelector((state) => state.auth);
 
-  // Obtiene el token para enviarlo en las petición
-  // const getToken = async () => {
-  //   const currentUser = auth.currentUser;
-  //   if (currentUser) {
-  //     const idToken = await currentUser.getIdToken(true);
-  //     return idToken;
-  //   }
-  // };
+  const fetchProveedores = useCallback(async (searchTerm = '') => {
+    try {
+      const response = searchTerm
+        ? await axios.post('http://127.0.0.1:4000/api/usuarios/buscarConFiltros', { search: searchTerm })
+        : await axios.get('http://127.0.0.1:4000/api/usuarios/busquedaProveedores');
 
-  // const axiosToVerifyToken = async () => {
-  //   try {
-  //     const idToken = await getToken();
-  //     console.log(idToken);
-  //     if (!idToken) {
-  //       console.error("No se pudo obtener el token de ID");
-  //       return;
-  //     }
+      const data = response.data.proveedores;
 
-  //     const response = await axios.get("http://localhost:4000/ruta-protegida", {
-  //       headers: {
-  //         Authorization: `Bearer ${idToken}`,
-  //       },
-  //     });
+      setProveedores(data);
+      setNoResults(data.length === 0);
+    } catch (error) {
+      console.error('Error al cargar los proveedores:', error);
+      setNoResults(true);
+    }
+  }, []);
 
-  //     console.log(response.data);
-  //   } catch (error) {
-  //     console.error("Error al verificar el token:", error);
-  //   }
-  // };
+  const handleClearSearch = () => {
+    setSearch('');
+    fetchProveedores('');
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchProveedores(search);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [search, fetchProveedores]);
 
   return (
     <div>
@@ -46,9 +45,13 @@ const DashboardComponent = () => {
         <h1 className="text-4xl font-bold text-gray-800 mb-4">¡El mejor lugar para asesorarte!</h1>
         <p className="text-lg text-gray-600">Busca lo que necesites y consulta con nuestros proveedores</p>
       </div>
-      <BarraBusqueda search={search} setSearch={setSearch} />
-      <ProveedorList search={search} />
+      <SearchBar search={search} setSearch={setSearch} onClear={handleClearSearch} />
 
+      {noResults ? (
+        <p className="text-center text-red-500 mt-4">No se encontraron resultados para tu búsqueda.</p>
+      ) : (
+        <ProveedorList proveedores={proveedores} />
+      )}
     </div>
   );
 };

@@ -1,39 +1,14 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const ProveedorList = ({ search }) => {
-    const [proveedores, setProveedores] = useState([]);
+const ProveedorList = ({ proveedores }) => {
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchProveedores = async () => {
-            try {
-                const response = await axios.get('/proveedores.json');
-                setProveedores(response.data);
-            } catch (error) {
-                console.error('Error al cargar los proveedores:', error);
-            }
-        };
-        fetchProveedores();
-    }, []);
-
-    // Memorizar la lista filtrada
-    const filteredProveedores = useMemo(() => {
-        return Array.isArray(proveedores) ? proveedores.filter((proveedor) => {
-            const searchTerm = search.toLowerCase();
-            const nombreMatch = proveedor.nombre.toLowerCase().includes(searchTerm);
-            const serviciosMatch = proveedor.servicios.some(servicio =>
-                servicio.toLowerCase().includes(searchTerm)
-            );
-            return nombreMatch || serviciosMatch;
-        }) : [];
-    }, [search, proveedores]);
+    console.log(proveedores)
 
     return (
         <div className="p-6 px-32">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredProveedores.map((proveedor, index) => (
+                {proveedores.map((proveedor, index) => (
                     <div
                         key={index}
                         className="bg-white p-4 rounded-lg shadow-lg text-center"
@@ -55,7 +30,7 @@ const ProveedorList = ({ search }) => {
                         </p>
                         <button
                             type="button"
-                            className="my-5 text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+                            className="my-5 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
                             onClick={() => navigate(`/proveedor/${proveedor.uid}`)}
                         >
                             Más información
