@@ -162,8 +162,13 @@ const disponibilidadProveedor = async (req, res = express.response) => {
 
 const actualizarUsuario = async (req, res = express.response) => {
 
-    const { username, email, _id } = req.query; 
-    const camposxActualizar = req.body; 
+    const { username, email, uid, _id } = req.query; 
+    let camposxActualizar = req.body; 
+
+    // Filtrar campos vacíos
+    camposxActualizar = Object.fromEntries(
+        Object.entries(camposxActualizar).filter(([key, value]) => value !== '')
+    );
 
     try {
         
@@ -179,6 +184,11 @@ const actualizarUsuario = async (req, res = express.response) => {
             filtroBusqueda = { email }
         
         } 
+        else if(uid && uid.length > 0) {
+            
+            filtroBusqueda = { uid }
+
+        }
         else if(_id && _id.length > 0) {
             
             filtroBusqueda = { _id }
@@ -188,12 +198,15 @@ const actualizarUsuario = async (req, res = express.response) => {
             
             return res.status(400).json({
                 ok: false,
-                msg: "Debe proporcionar un username, email o _id válido para buscar"
+                msg: "Debe proporcionar un username, email o uid válido para buscar"
             });
 
         }
 
-        const proveedorActualizado = await Usuario.findOneAndUpdate(filtroBusqueda, camposxActualizar, { new: true, runValidators: true });
+        const proveedorActualizado = await Usuario.findOneAndUpdate(
+            filtroBusqueda,
+            camposxActualizar,
+            { new: true, runValidators: true, omitUndefined: true });
 
         if (!proveedorActualizado) {
             return res.status(404).json({
@@ -434,7 +447,7 @@ const actualizarIsBooked = async (req, res = express.response) => {
 
 const agregarDisponibilidad = async (req, res = express.response) => {
     
-    const { username, email, _id, fecha, franjas } = req.body;
+    const { username, email, _id, fecha, franjas, uid } = req.body;
 
     try {
     
@@ -454,7 +467,12 @@ const agregarDisponibilidad = async (req, res = express.response) => {
 
             filtroBusqueda = { _id }
         
-        } 
+        }
+        else if(uid && uid.length > 0) {
+
+            filtroBusqueda = { uid }
+        
+        }  
         else {
         
             return res.status(400).json({
@@ -797,25 +815,21 @@ const eliminarFranjaHoraria = async (req, res = express.response) => {
 
 const buscarProveedores = async (req, res = express.response) => {
 
-    const { nombre, servicios } = req.body;
+    const { search } = req.body;
 
     try {
     
-        const filtrosConsulta = { esProveedor: true };
+        const filtrosConsulta = {
 
-        if(nombre) {
-          
-            filtrosConsulta.nombre = new RegExp(nombre, "i")
-        
-        }
+            esProveedor: true,
+            $or: [
+                { nombre: new RegExp(search, "i") },
+                { servicios: { $in: [new RegExp(search, "i")] } }
+            ]
 
-        if(servicios) {
+        };
 
-            filtrosConsulta.servicios = { $in: [new RegExp(servicios, "i")] }
-        
-        }
-
-        const proveedores = await Usuario.find(filtrosConsulta);
+        const proveedores = await Usuario.find(filtrosConsulta).select('uid nombre servicios fotoPerfil calificacionPromedio');
 
         res.status(200).json({
         
@@ -872,7 +886,7 @@ const obtenerProveedoresListado = async (req, res) => {
     
     try {
     
-        const proveedores = await Usuario.find({ esProveedor: true }, 'nombre servicios fotoPerfil');
+        const proveedores = await Usuario.find({ esProveedor: true }, 'uid nombre servicios fotoPerfil calificacionPromedio');
         
         res.status(200).json({
 
