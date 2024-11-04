@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import ProveedorDetail from "./pages/ProveedorDetail/ProveedorDetail";
 import AgendarCita from "/src/pages/ProveedorDetail/AgendarCita.jsx"
+import PerfilUsuario from "/src/pages/Usuario/Perfil.jsx"
 
 
 
@@ -42,14 +43,22 @@ const App = () => {
               </PrivateRoute>
             }
           />
+           <Route
+            path="/perfil/:uid"
+            element={
+              <PrivateRoute>
+                <PerfilUsuario/>
+              </PrivateRoute>
+            }
+          />
           <Route
-            path="/proveedor/:id"
+            path="/proveedor/:uid"
             element={
               <ProveedorDetail />
             }
           />
           <Route
-            path="/proveedor/:id/agendarCita"
+            path="/proveedor/:uid/agendarCita"
             element={
               <PrivateRoute>
                 <AgendarCita />
