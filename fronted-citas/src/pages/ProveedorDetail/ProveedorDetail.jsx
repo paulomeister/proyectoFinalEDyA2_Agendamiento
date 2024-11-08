@@ -10,7 +10,7 @@ const ProveedorDetail = () => {
 
   const handleAgendarCita = () => {
     // Redirigir a la ruta para agendar una cita
-    navigate('/agendar-cita'); // Cambia esta ruta según tu configuración
+    navigate(`/proveedor/${uid}/agendarCita`); 
   };
 
   useEffect(() => {
@@ -84,8 +84,8 @@ const ProveedorDetail = () => {
                 Ver Calificaciones ({proveedor.calificaciones.length})
               </summary>
               <div className="mt-4 h-72 overflow-y-auto space-y-4">
-                {proveedor.calificaciones.map((calificacion) => (
-                  <div key={calificacion._id} className="bg-white p-4 rounded shadow-sm mr-2">
+                {proveedor.calificaciones.map((calificacion, index) => (
+                  <div key={index} className="bg-white p-4 rounded shadow-sm mr-2">
                     <p className="font-semibold text-gray-800">
                       {calificacion.username}: {calificacion.comentario}
                     </p>

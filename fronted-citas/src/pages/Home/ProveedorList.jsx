@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 const ProveedorList = ({ proveedores }) => {
     const navigate = useNavigate();
-    console.log(proveedores)
 
     return (
         <div className="p-6 px-32">
