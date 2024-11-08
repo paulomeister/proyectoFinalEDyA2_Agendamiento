@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import ModalDisponibilidad from './ModalDisponibilidad';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateUserSuccess } from '../../store/auth/authSlice';
 
 const UserProfile = () => {
     const [usuario, setUsuario] = useState(null);
@@ -10,26 +12,28 @@ const UserProfile = () => {
     const [isDisponibilidadOpen, setDisponibilidadOpen] = useState(false); // Estado para el modal
     const { uid } = useParams();
     const { register, handleSubmit, reset } = useForm();
+    const dispatch = useDispatch();
+
+    const fetchUsuario = async () => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:4000/api/usuarios/usuario/${uid}`);
+            const userData = response.data.usuario;
+
+            setUsuario(userData);
+
+            reset({
+                username: userData.username,
+                esProveedor: userData.esProveedor,
+                fotoPerfil: userData.fotoPerfil,
+                servicios: userData.servicios ? userData.servicios.join(', ') : '',
+                biografia: userData.biografia,
+            });
+        } catch (error) {
+            console.error("Error al obtener los datos del usuario:", error);
+        }
+    };
 
     useEffect(() => {
-        const fetchUsuario = async () => {
-            try {
-                const response = await axios.get(`http://127.0.0.1:4000/api/usuarios/usuario/${uid}`);
-                const userData = response.data.usuario;
-
-                setUsuario(userData);
-
-                reset({
-                    username: userData.username,
-                    esProveedor: userData.esProveedor,
-                    servicios: userData.servicios ? userData.servicios.join(', ') : '',
-                    biografia: userData.biografia,
-                });
-            } catch (error) {
-                console.error("Error al obtener los datos del usuario:", error);
-            }
-        };
-
         fetchUsuario();
     }, [uid, reset]);
 
@@ -46,26 +50,32 @@ const UserProfile = () => {
     const actualizarUsuario = async (data) => {
         try {
             const response = await axios.patch(`http://127.0.0.1:4000/api/usuarios/actualizarUsuario?uid=${uid}`, data);
-            setUsuario(response.data.proveedor);
+            const updateUserData = response.data.proveedor;
+            setUsuario(updateUserData);
+
+            const serializableUser = {
+                uid: uid,
+                email: updateUserData.email,
+                displayName: updateUserData.nombre,
+                username: updateUserData.username,
+                photoURL: updateUserData.fotoPerfil,
+            };
+            dispatch(updateUserSuccess(serializableUser));
+
             setMensaje('Usuario actualizado con éxito');
-            reset({
-                username: '',
-                esProveedor: false,
-                servicios: '',
-                biografia: '',
-                fotoPerfil: ''
-            });
+            fetchUsuario();
 
             setTimeout(() => {
                 setMensaje('');
-            }, 3000);
+            }, 2000);
+
         } catch (error) {
             console.error("Error actualizando usuario:", error);
             setMensaje('Hubo un problema al actualizar el usuario');
 
             setTimeout(() => {
                 setMensaje('');
-            }, 3000);
+            }, 2000);
         }
     };
 
