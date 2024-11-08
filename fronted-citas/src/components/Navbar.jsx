@@ -8,19 +8,17 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const { isAuthenticated, user } = useSelector((state) => state.auth);
-
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [notificationMenuOpen, setNotificationMenuOpen] = useState(false);
-
   const toggleNotificationMenu = () => setNotificationMenuOpen(!notificationMenuOpen);
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const toggleUserMenu = () => setUserMenuOpen(!userMenuOpen);
 
-
   const handleLogout = () => {
     try {
       dispatch(logout());
+      navigate('/login');
     } catch (error) {
       console.error(error);
     }
