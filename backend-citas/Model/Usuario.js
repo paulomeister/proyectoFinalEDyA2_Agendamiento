@@ -16,7 +16,7 @@ const { Schema, model } = require("mongoose");
     nombre: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
-    password: {type: String, required: true},
+    password: {type: String, required: false},
     fotoPerfil: { type: String },
     registradoEn: { type: Date, default: Date.now },
     esProveedor: {type: Boolean, required: true},

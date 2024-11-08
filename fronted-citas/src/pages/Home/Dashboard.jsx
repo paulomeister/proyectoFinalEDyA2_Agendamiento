@@ -8,7 +8,8 @@ const DashboardComponent = () => {
   const [search, setSearch] = useState('');
   const [proveedores, setProveedores] = useState([]);
   const [noResults, setNoResults] = useState(false); 
-  const { user } = useSelector((state) => state.auth);
+  const [isFirstLoad, setIsFirstLoad] = useState(true); 
+
 
   const fetchProveedores = useCallback(async (searchTerm = '') => {
     try {
@@ -26,10 +27,18 @@ const DashboardComponent = () => {
     }
   }, []);
 
-  const handleClearSearch = () => {
-    setSearch('');
-    fetchProveedores('');
-  };
+  useEffect(() => {
+    if (isFirstLoad) {
+      fetchProveedores();
+      setIsFirstLoad(false);
+    } else {
+      const timer = setTimeout(() => {
+        fetchProveedores(search);
+      }, 500);
+
+      return () => clearTimeout(timer); 
+    }
+  }, [search, fetchProveedores, isFirstLoad]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -38,6 +47,11 @@ const DashboardComponent = () => {
 
     return () => clearTimeout(timer);
   }, [search, fetchProveedores]);
+
+  const handleClearSearch = () => {
+    setSearch('');
+    fetchProveedores('');
+  };
 
   return (
     <div>

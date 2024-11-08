@@ -28,6 +28,10 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.error = null;
     },
+    updateUserSuccess: (state, action) => {
+      state.user = { ...state.user, ...action.payload };
+    },
+    
   },
 });
 
@@ -36,6 +40,7 @@ export const {
   loginSuccess,
   loginFailure,
   logoutSuccess,
+  updateUserSuccess,
 } = authSlice.actions;
 
 export default authSlice.reducer;
