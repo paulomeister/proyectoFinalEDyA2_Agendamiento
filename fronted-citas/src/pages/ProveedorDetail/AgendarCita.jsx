@@ -4,14 +4,14 @@ import ModalConfirmacion from "../../components/ModalConfirmacion.jsx"
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import { asignarFecha } from '../../store/slices/reservacionSlice'
+import { asignarFecha, ocultarModal } from '../../store/slices/reservacionSlice'
 import { useDispatch } from "react-redux"
 
 
 
 function AgendarCita() {
   
-  const { id } = useParams()
+  const { uid } = useParams()
   const dispatch = useDispatch()
   
   const [disponibilidad, setDisponibilidad] = useState([]) 
@@ -36,6 +36,12 @@ function AgendarCita() {
 
   useEffect(() => {
 
+    dispatch(ocultarModal())
+
+  }, [])
+
+  useEffect(() => {
+
     const diasPorMes = {
   
       "Enero": 31, "Febrero": 28, "Marzo": 31, "Abril": 30,
@@ -55,11 +61,11 @@ function AgendarCita() {
 
       try {
 
-        const response = await axios.get(`http://localhost:4000/api/usuarios/disponiblidadProveedor?uid=${id}`) 
+        const response = await axios.get(`http://localhost:4000/api/usuarios/disponiblidadProveedor?uid=${uid}`) 
         
         if(!response.data) {
 
-          throw Error(`No se encontró la disponibilidad del proveedor con id ${id}`);
+          throw Error(`No se encontró la disponibilidad del proveedor con id ${uid}`);
 
         }
 
@@ -75,7 +81,7 @@ function AgendarCita() {
     }
     recuperarDisponibilidad()
 
-  }, [id])
+  }, [uid])
 
   useEffect(() => {
 

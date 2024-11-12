@@ -1,4 +1,4 @@
-import React from "react";
+import React,  {useEffect} from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LoginComponent from "./pages/auth/Login";
 import RegisterComponent from "./pages/auth/Registro";
@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import ProveedorDetail from "./pages/ProveedorDetail/ProveedorDetail";
 import AgendarCita from "/src/pages/ProveedorDetail/AgendarCita.jsx"
 import PerfilUsuario from "/src/pages/Usuario/Perfil.jsx"
-
+import MisCitas from "./pages/Usuario/MisCitas";
 
 
 const App = () => {
@@ -57,6 +57,16 @@ const App = () => {
 
             }
          />
+          <Route
+            path="/misCitas"
+            element={
+              <PrivateRoute>
+                <MisCitas />
+              </PrivateRoute>
+
+            }
+         />
+
         </Route>
         
       </Routes>
