@@ -58,13 +58,27 @@ export const loginWithEmail = (email, password) => async (dispatch) => {
   dispatch(loginRequest());
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password);
+    
+    const fetchUsuario = async (uid) => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:4000/api/usuarios/usuario/${uid}`);
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching usuario:', error);
+        throw error;
+      }
+    };
+    const usuarioData = await fetchUsuario(user.uid);
+
     const serializableUser = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
+      esProveedor: usuarioData.usuario.esProveedor,
       token: user.accessToken,
     };
+
     dispatch(loginSuccess(serializableUser));
   } catch (error) {
     dispatch(loginFailure(error.message));
@@ -89,6 +103,7 @@ export const loginWithGoogle = () => async (dispatch) => {
       displayName: user.displayName,
       photoURL: user.photoURL,
       token: user.accessToken,
+      esProveedor: userData.esProveedor,
     };
 
     dispatch(loginSuccess(serializableUser));

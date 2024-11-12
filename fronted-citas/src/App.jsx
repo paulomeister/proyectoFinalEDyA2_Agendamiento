@@ -5,16 +5,14 @@ import RegisterComponent from "./pages/auth/Registro";
 import DashboardComponent from "./pages/Home/Dashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import Layout from "./components/Layout";
-import { useSelector } from "react-redux";
 import ProveedorDetail from "./pages/ProveedorDetail/ProveedorDetail";
 import AgendarCita from "/src/pages/ProveedorDetail/AgendarCita.jsx"
 import PerfilUsuario from "/src/pages/Usuario/Perfil.jsx"
+import CitaDetalles from "./pages/Cita/Cita";
 
 
 
 const App = () => {
-  const { user } = useSelector((state) => state.auth);
-
 
   return (
     <Router>
@@ -53,6 +51,15 @@ const App = () => {
             element={
               <PrivateRoute>
                 <AgendarCita />
+              </PrivateRoute>
+
+            }
+         />
+         <Route
+            path="/cita-detalle/:id"
+            element={
+              <PrivateRoute>
+                <CitaDetalles />
               </PrivateRoute>
 
             }
