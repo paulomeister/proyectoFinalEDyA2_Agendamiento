@@ -19,7 +19,7 @@ function ModalConfirmacion() {
     const [usuarioId, setUsuarioId] = useState(null)
     const [cargando, setCargando] = useState(null)
 
-    const {id} = useParams()
+    const {uid} = useParams()
 
     const handleCerrarModal = () => {
 
@@ -97,7 +97,7 @@ function ModalConfirmacion() {
             const cita = {
 
                 usuarioId: usuarioId, 
-                proveedorId: id,
+                proveedorId: uid,
                 fecha: fechaSeleccionada,
                 comienzaEn: franjaElegida.startTime,
                 terminaEn: franjaElegida.endTime
@@ -113,7 +113,7 @@ function ModalConfirmacion() {
 
             const nuevaDisponibilidad = {
 
-                uid: id,
+                uid: uid,
                 fecha: fechaSeleccionada,
                 startTime: franjaElegida.startTime,
                 endTime: franjaElegida.endTime,
