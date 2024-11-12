@@ -6,12 +6,14 @@ const {
     actualizarStatusCita,
     actualizarMensajeNota,
     obtenerCitasUsuario,
-    obtenerCitasProveedor
+    obtenerCitasProveedor,
+    buscarCitaPorId
 
 } = require("../Controller/CitaController")
 
 
 router.post('/crearCita', crearCita)
+router.get('/obtenerCitaPorId/:_id', buscarCitaPorId);
 router.put('/modificarMensaje', actualizarMensajeNota)
 router.put('/actualizarStatus', actualizarStatusCita)
 router.get('/citasAgendadas/:usuarioId', obtenerCitasUsuario)

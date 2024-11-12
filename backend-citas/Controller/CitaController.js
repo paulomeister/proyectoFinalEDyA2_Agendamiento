@@ -3,7 +3,6 @@ const Cita = require("../Model/Cita")
 const Usuario = require("../Model/Usuario")
 
 
-
 const crearCita = async (req, res = express.response) => {
 
     try {
@@ -84,6 +83,31 @@ const crearCita = async (req, res = express.response) => {
 
 
 }
+
+const buscarCitaPorId = async (req, res = express.response) => {
+    const { _id } = req.params;
+    try {
+        const cita = await Cita.findById(_id);
+
+        if (!cita) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Cita no encontrada'
+            });
+        }
+
+        res.json({
+            ok: true,
+            cita
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error al buscar la cita'
+        });
+    }
+};
 
 const actualizarStatusCita = async (req, res = express.response) => {
 
@@ -300,6 +324,7 @@ module.exports = {
                     actualizarStatusCita,
                     actualizarMensajeNota,
                     obtenerCitasUsuario,
-                    obtenerCitasProveedor
+                    obtenerCitasProveedor,
+                    buscarCitaPorId
 
                  }
