@@ -48,6 +48,7 @@ const Chat = ({ citaId, isDisabled }) => {
 
   return (
     <div className="bg-white w-full p-2">
+      <h2 className="text-3xl font-semibold text-gray-800">Chat</h2>
       <div className="h-64 overflow-y-auto border-b mb-3">
         {mensajes.map((msg, index) => (
           <div

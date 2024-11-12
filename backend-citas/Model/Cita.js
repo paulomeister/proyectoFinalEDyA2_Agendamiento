@@ -17,7 +17,7 @@ const CitaSchema = new Schema({
 },
   notas: {
 
-    mensaje: { type: String }
+    mensaje: { type: String, default: "" }
 
   }
 

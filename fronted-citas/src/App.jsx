@@ -1,5 +1,4 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginComponent from "./pages/auth/Login";
 import RegisterComponent from "./pages/auth/Registro";
 import DashboardComponent from "./pages/Home/Dashboard";
@@ -9,7 +8,7 @@ import ProveedorDetail from "./pages/ProveedorDetail/ProveedorDetail";
 import AgendarCita from "/src/pages/ProveedorDetail/AgendarCita.jsx"
 import PerfilUsuario from "/src/pages/Usuario/Perfil.jsx"
 import CitaDetalles from "./pages/Cita/Cita";
-
+import MisCitas from "./pages/Usuario/MisCitas";
 
 
 const App = () => {
@@ -32,11 +31,11 @@ const App = () => {
               </PrivateRoute>
             }
           />
-           <Route
+          <Route
             path="/perfil/:uid"
             element={
               <PrivateRoute>
-                <PerfilUsuario/>
+                <PerfilUsuario />
               </PrivateRoute>
             }
           />
@@ -54,18 +53,27 @@ const App = () => {
               </PrivateRoute>
 
             }
-         />
-         <Route
+          />
+          <Route
             path="/cita-detalle/:id"
             element={
               <PrivateRoute>
                 <CitaDetalles />
               </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/misCitas"
+            element={
+              <PrivateRoute>
+                <MisCitas />
+              </PrivateRoute>
 
             }
-         />
+          />
         </Route>
-        
+
       </Routes>
     </Router>
   );
