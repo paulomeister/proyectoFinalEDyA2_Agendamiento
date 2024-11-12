@@ -191,11 +191,21 @@ const actualizarMensajeNota = async (req, res = express.response) => {
 
 const obtenerCitasUsuario = async (req, res = express.response) => {
 
-    const { usuarioId } = req.params;
+    const { usuarioId } = req.params
 
     try {
 
         const citas = await Cita.find({ usuarioId })
+        .populate({ 
+
+            path: 'proveedorId', 
+            model: 'Usuario', 
+            select: 'uid nombre', 
+            match: { uid: { $exists: true } }, 
+            localField: 'proveedorId',
+            foreignField: 'uid'
+        
+        })
 
         if (citas.length === 0) {
 
@@ -238,6 +248,16 @@ const obtenerCitasProveedor = async (req, res = express.response) => {
     try {
 
         const citas = await Cita.find({ proveedorId })
+        .populate({ 
+        
+            path: 'usuarioId', 
+            model: 'Usuario', 
+            select: 'uid nombre', 
+            match: { uid: { $exists: true } },  
+            localField: 'usuarioId',
+            foreignField: 'uid'
+        
+        })        
 
         if (citas.length === 0) {
 

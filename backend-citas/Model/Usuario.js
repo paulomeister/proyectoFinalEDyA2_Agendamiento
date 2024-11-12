@@ -60,7 +60,7 @@ const { Schema, model } = require("mongoose");
 UsuarioSchema.virtual('citas', {
 
   ref: 'Cita',
-  localField: '_id',
+  localField: 'uid',
   foreignField: 'proveedorId',
   justOne: false
 

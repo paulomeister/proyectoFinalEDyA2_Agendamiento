@@ -77,7 +77,7 @@ const Navbar = () => {
                   
                   Calendario
                 </button>
-                <button onClick={() => navigate(`/dashboard`)} className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
+                <button onClick={() => navigate(`/misCitas`)} className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
                   Citas
                 </button>
               </div>
