@@ -6,7 +6,7 @@ import ActionButtons from '../../components/CitaDetalles/ActionButtons';
 import ConfirmModal from '../../components/CitaDetalles/ConfirmModal';
 import Chat from '../../components/CitaDetalles/Chat';
 import useCita from '../../Hooks/useCita';
-import useUserNames from '../../hooks/useUserNames';
+import useUserNames from '../../Hooks/useUserNames';
 import axios from 'axios';
 
 
