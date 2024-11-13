@@ -61,7 +61,7 @@ function AgendarCita() {
 
       try {
 
-        const response = await axios.get(`http://localhost:4000/api/usuarios/disponiblidadProveedor?uid=${uid}`) 
+        const response = await axios.get(`https://backendcitasedyaii-production.up.railway.app/api/usuarios/disponiblidadProveedor?uid=${uid}`) 
         
         if(!response.data) {
 

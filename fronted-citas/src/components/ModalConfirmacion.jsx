@@ -103,7 +103,7 @@ function ModalConfirmacion() {
                 terminaEn: franjaElegida.endTime
 
             }
-            const enviarCita = await axios.post('http://localhost:4000/api/citas/crearCita', cita)
+            const enviarCita = await axios.post('https://backendcitasedyaii-production.up.railway.app/api/citas/crearCita', cita)
 
             if(!enviarCita.data.ok) {
 
@@ -120,7 +120,7 @@ function ModalConfirmacion() {
                 isBooked: true
 
             }
-            const actualizarDisponibilidad = await axios.put('http://localhost:4000/api/usuarios/actualizarDisponibilidad', nuevaDisponibilidad)
+            const actualizarDisponibilidad = await axios.put('https://backendcitasedyaii-production.up.railway.app/api/usuarios/actualizarDisponibilidad', nuevaDisponibilidad)
 
 
             if(!actualizarDisponibilidad.data.ok) {
