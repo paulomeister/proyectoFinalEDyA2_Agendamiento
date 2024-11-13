@@ -24,6 +24,14 @@ const App = () => {
         <Route element={<Layout />}>
           {/* Rutas protegidas dentro del Layout */}
           <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <DashboardComponent />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/dashboard"
             element={
               <PrivateRoute>

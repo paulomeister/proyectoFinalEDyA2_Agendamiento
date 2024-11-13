@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import axios from 'axios'
 import MyDropdown from "./MyDropdown"
 import agendada from '../assets/agendada.png'
@@ -6,6 +7,8 @@ import completada from '../assets/completada.png'
 import cancelada from '../assets/cancelada.png'
 
 function Agenda({tipo, uid}) {
+
+    const navigate = useNavigate()
 
     const [citasUsuario, setCitasUsuario] = useState(null) 
     
@@ -142,7 +145,7 @@ function Agenda({tipo, uid}) {
                                                         </p>
                                                         <p className="text-gray-600">Estado</p>
                                                     </div>
-                                                        <button className="bg-zinc-300 p-2 rounded-full hover:bg-zinc-400 cursor-pointer">Detalles</button>
+                                                        <button className="bg-zinc-300 p-2 rounded-full hover:bg-zinc-400 cursor-pointer" onClick={() => navigate(`/cita-detalle/${cita._id}`)}>Detalles</button>
                                                 </div>
                                             </article>
                                         )))
