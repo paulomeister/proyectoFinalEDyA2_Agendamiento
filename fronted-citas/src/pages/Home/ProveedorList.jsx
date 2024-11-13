@@ -24,9 +24,9 @@ const ProveedorList = ({ proveedores }) => {
                         <p className="mt-2 text-yellow-500 font-bold">
                             Calificación: {proveedor.calificacionPromedio} ⭐
                         </p>
-                        <p className="text-sm text-gray-500">
+{/*                         <p className="text-sm text-gray-500">
                             {proveedor.personasAtendidas} personas atendidas
-                        </p>
+                        </p> */}
                         <button
                             type="button"
                             className="my-5 text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
