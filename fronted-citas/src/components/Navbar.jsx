@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/auth/authActions';
+import logo from '../../public/meeteaseicon.ico';	
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ const Navbar = () => {
             <div className="flex flex-shrink-0 items-center">
               <img
                 className="h-8 w-auto"
-                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
+                src={logo}
                 alt="Your Company"
               />
             </div>
