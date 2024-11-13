@@ -7,7 +7,7 @@ const CitaInfo = ({ cita, nombreProveedor, nombreCliente }) => {
 
   const generarLinkReunion = async () => {
     try {
-      const response = await axios.post('/api/citas/actualizar-link-reunion', { citaId: cita._id });
+      const response = await axios.post('https://backendcitasedyaii-production.up.railway.app//api/citas/actualizar-link-reunion', { citaId: cita._id });
       setLinkReunion(response.data.updatedCita.linkReunion);
       alert('El enlace de la reunión ha sido generado con éxito.');
     } catch (error) {
