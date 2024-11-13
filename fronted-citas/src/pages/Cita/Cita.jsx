@@ -31,24 +31,27 @@ const CitaDetalles = () => {
     const status = actionType === 'finalizar' ? 'completada' : 'cancelada';
 
     try {
+      // Si se finalizó la cita guarda la nota que se haya escrito
       if (actionType === 'finalizar') {
         await axios.put('http://127.0.0.1:4000/api/citas/modificarMensaje', {
           citaId: cita._id,
           mensaje: nota,
         });
       }
-
+      // Modifica el status de la cita a completada o cancelada
       await axios.put('http://127.0.0.1:4000/api/citas/actualizarStatus', {
         citaId: cita._id,
         status: status,
       });
 
+      // actualiza la informacion de la cita en el estado
       setCita((prevCita) => ({
         ...prevCita,
         notas: actionType === 'finalizar' ? { mensaje: nota } : prevCita.notas,
         status: status,
       }));
 
+      // cierra el modal y redirige a la lista de citas
       setShowModal(false);
       navigate('/misCita');
     } catch (error) {
