@@ -16,7 +16,7 @@ const ProveedorDetail = () => {
   useEffect(() => {
     const fetchProveedor = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:4000/api/usuarios/usuario/${uid}`);
+        const response = await axios.get(`https://backendcitasedyaii-production.up.railway.app/api/usuarios/usuario/${uid}`);
         setProveedor(response.data.usuario);
       } catch (error) {
         console.error('Error al cargar el proveedor:', error);

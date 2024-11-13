@@ -32,14 +32,14 @@ const CitaDetalles = () => {
 
     try {
       if (actionType === 'finalizar') {
-        await axios.put('http://127.0.0.1:4000/api/citas/modificarMensaje', {
+        await axios.put('https://backendcitasedyaii-production.up.railway.app/api/citas/modificarMensaje', {
           citaId: cita._id,
           mensaje: nota,
         });
       }
       else if (actionType === 'cancelar') {
 
-        await axios.put('http://127.0.0.1:4000/api/usuarios/actualizarDisponibilidad', {
+        await axios.put('https://backendcitasedyaii-production.up.railway.app/api/usuarios/actualizarDisponibilidad', {
 
           uid: cita.proveedorId,
           fecha: cita.fecha,
@@ -51,7 +51,7 @@ const CitaDetalles = () => {
 
       }
 
-      await axios.put('http://127.0.0.1:4000/api/citas/actualizarStatus', {
+      await axios.put('https://backendcitasedyaii-production.up.railway.app/api/citas/actualizarStatus', {
         citaId: cita._id,
         status: status,
       });

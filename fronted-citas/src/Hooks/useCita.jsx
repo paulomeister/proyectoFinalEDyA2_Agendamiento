@@ -7,7 +7,7 @@ const useCita = (id) => {
   useEffect(() => {
     const fetchCita = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:4000/api/citas/obtenerCitaPorId/${id}`);
+        const response = await axios.get(`https://backendcitasedyaii-production.up.railway.app/api/citas/obtenerCitaPorId/${id}`);
         if (response.data.ok) {
           setCita(response.data.cita);
         }

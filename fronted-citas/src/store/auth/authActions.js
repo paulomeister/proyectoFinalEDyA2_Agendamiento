@@ -24,7 +24,7 @@ export const registerWithEmail = (data) => async (dispatch) => {
       servicios: servicios
     };
 
-    await axios.post("http://127.0.0.1:4000/api/usuarios/crearUsuario", userData, {
+    await axios.post("https://backendcitasedyaii-production.up.railway.app/api/usuarios/crearUsuario", userData, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -61,7 +61,7 @@ export const loginWithEmail = (email, password) => async (dispatch) => {
     
     const fetchUsuario = async (uid) => {
       try {
-        const response = await axios.get(`http://127.0.0.1:4000/api/usuarios/usuario/${uid}`);
+        const response = await axios.get(`https://backendcitasedyaii-production.up.railway.app/api/usuarios/usuario/${uid}`);
         return response.data;
       } catch (error) {
         console.error('Error fetching usuario:', error);
@@ -114,7 +114,7 @@ export const loginWithGoogle = () => async (dispatch) => {
 
 const checkIfUserExists = async (uid) => {
   try {
-    const response = await axios.get(`http://127.0.0.1:4000/api/usuarios/usuario/${uid}`);
+    const response = await axios.get(`https://backendcitasedyaii-production.up.railway.app/api/usuarios/usuario/${uid}`);
     return response.data.usuario;
   } catch (error) {
     if (error.response && error.response.status === 404) {
@@ -135,7 +135,7 @@ const registerNewUser = async (user) => {
     servicios: []
   };
 
-  await axios.post("http://127.0.0.1:4000/api/usuarios/crearUsuario", newUser, {
+  await axios.post("https://backendcitasedyaii-production.up.railway.app/api/usuarios/crearUsuario", newUser, {
     headers: {
       'Content-Type': 'application/json',
     },

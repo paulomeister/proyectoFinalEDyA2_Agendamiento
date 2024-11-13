@@ -36,7 +36,7 @@ function Agenda({tipo, uid}) {
             try {
                 
                 setCargando(true)
-                const citas = await axios.get(`http://localhost:4000/api/citas/${tipo}/${uid}`)
+                const citas = await axios.get(`https://backendcitasedyaii-production.up.railway.app/api/citas/${tipo}/${uid}`)
         
                 setCitasUsuario(citas.data.citas)
                 setCargando(false)
