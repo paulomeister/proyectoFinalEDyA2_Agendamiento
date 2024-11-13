@@ -37,6 +37,19 @@ const CitaDetalles = () => {
           mensaje: nota,
         });
       }
+      else if (actionType === 'cancelar') {
+
+        await axios.put('http://127.0.0.1:4000/api/usuarios/actualizarDisponibilidad', {
+
+          uid: cita.proveedorId,
+          fecha: cita.fecha,
+          startTime: cita.comienzaEn,
+          endTime: cita.terminaEn,
+          isBooked: false
+
+        })
+
+      }
 
       await axios.put('http://127.0.0.1:4000/api/citas/actualizarStatus', {
         citaId: cita._id,
@@ -50,7 +63,7 @@ const CitaDetalles = () => {
       }));
 
       setShowModal(false);
-      navigate('/misCita');
+      navigate('/misCitas');
     } catch (error) {
       console.error('Error al actualizar la cita:', error);
     }
