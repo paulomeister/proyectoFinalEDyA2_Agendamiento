@@ -1,6 +1,7 @@
 const express = require("express")
 const Cita = require("../Model/Cita")
 const Usuario = require("../Model/Usuario")
+const createMeetingLink = require("../GoogleMeet/config")
 
 
 const crearCita = async (req, res = express.response) => {
@@ -60,11 +61,28 @@ const crearCita = async (req, res = express.response) => {
         const cita = new Cita(req.body)
         await cita.save()
 
+        // SE GENERA LA REUNIÓN CUANDO SE ENVÍA LA PETICIÓN DE RESERVAR
+        const linkReunion = await createMeetingLink() // Función [1]
+
+        const updatedCita = await Cita.findByIdAndUpdate( // Función [2]. Este método se puede usar para actualizar la cita luego cuando el proveedor genere el link
+            
+            cita._id, // se pasará el _id de la cita sobre la cual se quiere añadir el link
+            { $set: { linkReunion: linkReunion } },  
+            { new: true } 
+        
+        )
+
+        // NO SE ALCANZA A ACTUALIZAR SI EL CLIENTE OPRIME EL BOTÓN SOLO UNA VEZ (REDIRECCIONA A LA AUTENTICACIÓN)
+        // SIN EMBARGO CREA LA CITA SIN EL LINK
+        // CREAR FUNCIONALIDAD PARA QUE EL LINK LO GENERE EL PROVEEDOR CON UN BOTÓN "Generar Link" y que se guarde en la base de datos actualizando la cita por su _id
+
+        // La nueva función debe llamar a las dos funciones [1] y [2] para actualizar la cita y que esta se pueda acceder desde el front con un botón para el link de la cita  
+
         res.status(201).json({
 
             ok: true,
             msg: "La cita fue creada con éxito",
-            cita
+            updatedCita // DEVOLVER cita como antes
 
         })
 

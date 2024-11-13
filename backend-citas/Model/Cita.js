@@ -7,6 +7,7 @@ const CitaSchema = new Schema({
   fecha: { type: String, required: true },
   comienzaEn: { type: String, required: true },
   terminaEn: { type: String, required: true },
+  linkReunion: {type: String},
   status: { 
 
     type: String, 
