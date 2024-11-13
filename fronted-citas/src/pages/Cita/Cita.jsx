@@ -6,7 +6,7 @@ import ActionButtons from '../../components/CitaDetalles/ActionButtons';
 import ConfirmModal from '../../components/CitaDetalles/ConfirmModal';
 import Chat from '../../components/CitaDetalles/Chat';
 import useCita from '../../Hooks/useCita';
-import useUserNames from '../../hooks/useUserNames';
+import useUserNames from '../../Hooks/useUserNames';
 import axios from 'axios';
 
 
@@ -33,13 +33,26 @@ const CitaDetalles = () => {
     try {
       // Si se finalizó la cita guarda la nota que se haya escrito
       if (actionType === 'finalizar') {
-        await axios.put('http://127.0.0.1:4000/api/citas/modificarMensaje', {
+        await axios.put('https://backendcitasedyaii-production.up.railway.app/api/citas/modificarMensaje', {
           citaId: cita._id,
           mensaje: nota,
         });
       }
-      // Modifica el status de la cita a completada o cancelada
-      await axios.put('http://127.0.0.1:4000/api/citas/actualizarStatus', {
+      else if (actionType === 'cancelar') {
+
+        await axios.put('https://backendcitasedyaii-production.up.railway.app/api/usuarios/actualizarDisponibilidad', {
+
+          uid: cita.proveedorId,
+          fecha: cita.fecha,
+          startTime: cita.comienzaEn,
+          endTime: cita.terminaEn,
+          isBooked: false
+
+        })
+
+      }
+
+      await axios.put('https://backendcitasedyaii-production.up.railway.app/api/citas/actualizarStatus', {
         citaId: cita._id,
         status: status,
       });
@@ -53,7 +66,7 @@ const CitaDetalles = () => {
 
       // cierra el modal y redirige a la lista de citas
       setShowModal(false);
-      navigate('/misCita');
+      navigate('/misCitas');
     } catch (error) {
       console.error('Error al actualizar la cita:', error);
     }

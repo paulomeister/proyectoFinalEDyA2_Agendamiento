@@ -14,8 +14,8 @@ const DashboardComponent = () => {
   const fetchProveedores = useCallback(async (searchTerm = '') => {
     try {
       const response = searchTerm
-        ? await axios.post('http://127.0.0.1:4000/api/usuarios/buscarConFiltros', { search: searchTerm })
-        : await axios.get('http://127.0.0.1:4000/api/usuarios/busquedaProveedores');
+        ? await axios.post('https://backendcitasedyaii-production.up.railway.app/api/usuarios/buscarConFiltros', { search: searchTerm })
+        : await axios.get('https://backendcitasedyaii-production.up.railway.app/api/usuarios/busquedaProveedores');
 
       const data = response.data.proveedores;
 

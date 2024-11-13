@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import axios from 'axios'
 import MyDropdown from "./MyDropdown"
 import agendada from '../assets/agendada.png'
@@ -6,6 +7,8 @@ import completada from '../assets/completada.png'
 import cancelada from '../assets/cancelada.png'
 
 function Agenda({tipo, uid}) {
+
+    const navigate = useNavigate()
 
     const [citasUsuario, setCitasUsuario] = useState(null) 
     
@@ -33,7 +36,7 @@ function Agenda({tipo, uid}) {
             try {
                 
                 setCargando(true)
-                const citas = await axios.get(`http://localhost:4000/api/citas/${tipo}/${uid}`)
+                const citas = await axios.get(`https://backendcitasedyaii-production.up.railway.app/api/citas/${tipo}/${uid}`)
         
                 setCitasUsuario(citas.data.citas)
                 setCargando(false)
@@ -127,10 +130,10 @@ function Agenda({tipo, uid}) {
                                                 <div className="group relative">
                                                     <h3 className="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600">
                                                         <label>
-                                                                {tipo === "citasAgendadas" ? cita.proveedorId.nombre : cita.usuarioId.nombre} <small>{tipo === "citasAgendadas" ? "(Proveedor)" : "(Usuario)"}</small>
+                                                                {tipo === "citasAgendadas" ? cita.proveedorId?.nombre : cita.usuarioId?.nombre} <small>{tipo === "citasAgendadas" ? "(Proveedor)" : "(Usuario)"}</small>
                                                         </label>
                                                     </h3>
-                                                    <p className="mt-5 line-clamp-3 text-sm/6 text-gray-600"><strong>Notas: </strong>{cita.notas.mensaje || "Aún no se ha escrito nada!"}</p>
+                                                    <p className="mt-5 line-clamp-3 text-sm/6 text-gray-600"><strong>Notas: </strong>{cita.notas?.mensaje || "Aún no se ha escrito nada!"}</p>
                                                 </div>
                                                 <div className="relative mt-8 flex items-center gap-x-4">
                                                     <img alt="" src={cita.status === "agendada" ? agendada : (cita.status === "completada" ? completada : cancelada)} className="h-10 w-10 rounded-full bg-gray-50" />
@@ -142,7 +145,7 @@ function Agenda({tipo, uid}) {
                                                         </p>
                                                         <p className="text-gray-600">Estado</p>
                                                     </div>
-                                                        <button className="bg-zinc-300 p-2 rounded-full hover:bg-zinc-400 cursor-pointer">Detalles</button>
+                                                        <button className="bg-zinc-300 p-2 rounded-full hover:bg-zinc-400 cursor-pointer" onClick={() => navigate(`/cita-detalle/${cita._id}`)}>Detalles</button>
                                                 </div>
                                             </article>
                                         )))

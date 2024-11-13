@@ -16,7 +16,7 @@ const UserProfile = () => {
 
     const fetchUsuario = async () => {
         try {
-            const response = await axios.get(`http://127.0.0.1:4000/api/usuarios/usuario/${uid}`);
+            const response = await axios.get(`https://backendcitasedyaii-production.up.railway.app/api/usuarios/usuario/${uid}`);
             const userData = response.data.usuario;
 
             setUsuario(userData);
@@ -49,7 +49,7 @@ const UserProfile = () => {
 
     const actualizarUsuario = async (data) => {
         try {
-            const response = await axios.patch(`http://127.0.0.1:4000/api/usuarios/actualizarUsuario?uid=${uid}`, data);
+            const response = await axios.patch(`https://backendcitasedyaii-production.up.railway.app/api/usuarios/actualizarUsuario?uid=${uid}`, data);
             const updateUserData = response.data.proveedor;
             setUsuario(updateUserData);
 
@@ -81,7 +81,7 @@ const UserProfile = () => {
 
     const handleDisponibilidadSubmit = async (disponibilidadData) => {
         try {
-            const response = await axios.patch(`http://127.0.0.1:4000/api/usuarios/agregarDisponibilidad`, {
+            const response = await axios.patch(`https://backendcitasedyaii-production.up.railway.app/api/usuarios/agregarDisponibilidad`, {
                 uid: usuario.uid,
                 ...disponibilidadData
             });

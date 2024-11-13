@@ -9,10 +9,10 @@ const useUserNames = (cita) => {
     const fetchNames = async () => {
       if (cita) {
         try {
-          const proveedorResponse = await axios.get(`http://127.0.0.1:4000/api/usuarios/usuario/${cita.proveedorId}`);
+          const proveedorResponse = await axios.get(`https://backendcitasedyaii-production.up.railway.app/api/usuarios/usuario/${cita.proveedorId}`);
           setNombreProveedor(proveedorResponse.data.usuario.nombre);
 
-          const clienteResponse = await axios.get(`http://127.0.0.1:4000/api/usuarios/usuario/${cita.usuarioId}`);
+          const clienteResponse = await axios.get(`https://backendcitasedyaii-production.up.railway.app/api/usuarios/usuario/${cita.usuarioId}`);
           setNombreCliente(clienteResponse.data.usuario.nombre);
         } catch (error) {
           console.error('Error al obtener los nombres:', error);

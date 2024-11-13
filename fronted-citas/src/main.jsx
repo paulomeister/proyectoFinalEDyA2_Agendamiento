@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
         const { uid, accessToken } = user;
 
         try {
-          const response = await axios.get(`http://127.0.0.1:4000/api/usuarios/usuario/${uid}`);
+          const response = await axios.get(`https://backendcitasedyaii-production.up.railway.app/api/usuarios/usuario/${uid}`);
           const userData = response.data.usuario;
 
           const serializableUser = {
