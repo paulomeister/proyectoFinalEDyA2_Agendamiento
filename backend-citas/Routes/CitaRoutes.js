@@ -7,7 +7,8 @@ const {
     actualizarMensajeNota,
     obtenerCitasUsuario,
     obtenerCitasProveedor,
-    buscarCitaPorId
+    buscarCitaPorId,
+    actualizarLinkReunion
 
 } = require("../Controller/CitaController")
 
@@ -18,6 +19,7 @@ router.put('/modificarMensaje', actualizarMensajeNota)
 router.put('/actualizarStatus', actualizarStatusCita)
 router.get('/citasAgendadas/:usuarioId', obtenerCitasUsuario)
 router.get('/citasAtender/:proveedorId', obtenerCitasProveedor)
+router.post('/actualizar-link-reunion', actualizarLinkReunion);
 
 
 module.exports = router

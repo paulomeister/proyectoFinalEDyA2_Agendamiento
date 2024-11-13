@@ -61,16 +61,45 @@ const crearCita = async (req, res = express.response) => {
         const cita = new Cita(req.body)
         await cita.save()
 
-        // SE GENERA LA REUNIÓN CUANDO SE ENVÍA LA PETICIÓN DE RESERVAR
-        const linkReunion = await createMeetingLink() // Función [1]
+        let linkReunion = null;
+        try {
+            linkReunion = await createMeetingLink(); // Función que genera el enlace
+        } catch (error) {
+            console.error("Error al generar el enlace de la reunión", error);
+        }
 
-        const updatedCita = await Cita.findByIdAndUpdate( // Función [2]. Este método se puede usar para actualizar la cita luego cuando el proveedor genere el link
+        // // SE GENERA LA REUNIÓN CUANDO SE ENVÍA LA PETICIÓN DE RESERVAR
+        // const linkReunion = await createMeetingLink() // Función [1]
+
+        // const updatedCita = await Cita.findByIdAndUpdate( // Función [2]. Este método se puede usar para actualizar la cita luego cuando el proveedor genere el link
             
-            cita._id, // se pasará el _id de la cita sobre la cual se quiere añadir el link
-            { $set: { linkReunion: linkReunion } },  
-            { new: true } 
+        //     cita._id, // se pasará el _id de la cita sobre la cual se quiere añadir el link
+        //     { $set: { linkReunion: linkReunion } },  
+        //     { new: true } 
         
-        )
+        // )
+
+        if (linkReunion) {
+            // Actualizar la cita con el enlace si se generó exitosamente
+            const updatedCita = await Cita.findByIdAndUpdate(
+                cita._id,
+                { $set: { linkReunion: linkReunion } },
+                { new: true }
+            );
+
+            return res.status(201).json({
+                ok: true,
+                msg: "La cita fue creada con éxito y el enlace fue añadido",
+                updatedCita,
+            });
+        } else {
+            // Devolver la cita sin el enlace, y que el enlace se genere después desde el frontend
+            return res.status(201).json({
+                ok: true,
+                msg: "La cita fue creada pero el enlace no pudo generarse. El proveedor puede generar el enlace más tarde.",
+                cita,
+            });
+        }
 
         // NO SE ALCANZA A ACTUALIZAR SI EL CLIENTE OPRIME EL BOTÓN SOLO UNA VEZ (REDIRECCIONA A LA AUTENTICACIÓN)
         // SIN EMBARGO CREA LA CITA SIN EL LINK
@@ -78,13 +107,13 @@ const crearCita = async (req, res = express.response) => {
 
         // La nueva función debe llamar a las dos funciones [1] y [2] para actualizar la cita y que esta se pueda acceder desde el front con un botón para el link de la cita  
 
-        res.status(201).json({
+        // res.status(201).json({
 
-            ok: true,
-            msg: "La cita fue creada con éxito",
-            updatedCita // DEVOLVER cita como antes
+        //     ok: true,
+        //     msg: "La cita fue creada con éxito",
+        //     updatedCita // DEVOLVER cita como antes
 
-        })
+        // })
 
     }
     catch(error) {
@@ -101,6 +130,35 @@ const crearCita = async (req, res = express.response) => {
 
 
 }
+
+// Función para actualizar el enlace de reunión posteriormente
+const actualizarLinkReunion = async (req, res = express.response) => {
+    try {
+        const { citaId } = req.body;
+
+        // Generar el enlace de la reunión
+        const linkReunion = await createMeetingLink();
+
+        // Actualizar la cita con el enlace
+        const updatedCita = await Cita.findByIdAndUpdate(
+            citaId,
+            { $set: { linkReunion: linkReunion } },
+            { new: true }
+        );
+
+        return res.status(200).json({
+            ok: true,
+            msg: "El enlace de la reunión fue generado y actualizado con éxito",
+            updatedCita,
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            ok: false,
+            msg: "Error al generar o actualizar el enlace de la reunión",
+        });
+    }
+};
 
 const buscarCitaPorId = async (req, res = express.response) => {
     const { _id } = req.params;
@@ -343,6 +401,7 @@ module.exports = {
                     actualizarMensajeNota,
                     obtenerCitasUsuario,
                     obtenerCitasProveedor,
-                    buscarCitaPorId
+                    buscarCitaPorId,
+                    actualizarLinkReunion
 
                  }
