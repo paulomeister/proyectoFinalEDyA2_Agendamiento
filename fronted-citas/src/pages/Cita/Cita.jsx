@@ -31,6 +31,7 @@ const CitaDetalles = () => {
     const status = actionType === 'finalizar' ? 'completada' : 'cancelada';
 
     try {
+      // Si se finalizó la cita guarda la nota que se haya escrito
       if (actionType === 'finalizar') {
         await axios.put('https://backendcitasedyaii-production.up.railway.app/api/citas/modificarMensaje', {
           citaId: cita._id,
@@ -56,12 +57,14 @@ const CitaDetalles = () => {
         status: status,
       });
 
+      // actualiza la informacion de la cita en el estado
       setCita((prevCita) => ({
         ...prevCita,
         notas: actionType === 'finalizar' ? { mensaje: nota } : prevCita.notas,
         status: status,
       }));
 
+      // cierra el modal y redirige a la lista de citas
       setShowModal(false);
       navigate('/misCitas');
     } catch (error) {
