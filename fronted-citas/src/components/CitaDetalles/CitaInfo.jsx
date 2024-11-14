@@ -1,6 +1,21 @@
 import React from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 
 const CitaInfo = ({ cita, nombreProveedor, nombreCliente }) => {
+  const [linkReunion, setLinkReunion] = useState(cita.linkReunion || '');
+
+  const generarLinkReunion = async () => {
+    try {
+      const response = await axios.post('https://backendcitasedyaii-production.up.railway.app//api/citas/actualizar-link-reunion', { citaId: cita._id });
+      setLinkReunion(response.data.updatedCita.linkReunion);
+      alert('El enlace de la reunión ha sido generado con éxito.');
+    } catch (error) {
+      console.error('Error al generar el enlace de la reunión:', error);
+      alert('Hubo un error al generar el enlace. Inténtalo nuevamente.');
+    }
+  };
+  
   return (
     <>
       <h2 className="text-3xl font-semibold text-gray-800">Detalles de la Cita</h2>
@@ -26,14 +41,23 @@ const CitaInfo = ({ cita, nombreProveedor, nombreCliente }) => {
               src="https://1000marcas.net/wp-content/uploads/2022/01/Google-Meet-Logo.png"
               alt="Google Meet Logo"
             />
-            <a
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 inline-block"
-              href="https://meet.google.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Unirse a la llamada
-            </a>
+            {linkReunion ? (
+              <a
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 inline-block"
+                href={linkReunion}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Unirse a la llamada
+              </a>
+            ) : (
+              <button
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 inline-block"
+                onClick={generarLinkReunion}
+              >
+                Generar enlace de reunión
+              </button>
+            )}
           </div>
         </>
       )}
